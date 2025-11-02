@@ -42,6 +42,8 @@ log "Check 1: Verifying container exit code"
 
 # Get the last container's exit code if it exists
 CONTAINER_EXIT_CODE=$(docker inspect "$CONTAINER_NAME" --format='{{.State.ExitCode}}' 2>/dev/null || echo "N/A")
+# Trim whitespace/newlines
+CONTAINER_EXIT_CODE=$(echo "$CONTAINER_EXIT_CODE" | tr -d '\n\r' | xargs)
 
 if [ "$CONTAINER_EXIT_CODE" = "N/A" ]; then
     log "INFO: Container not found or already removed (--rm flag used)"
