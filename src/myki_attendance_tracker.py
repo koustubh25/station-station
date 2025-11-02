@@ -258,7 +258,7 @@ def main() -> int:
                 print("\n" + "-" * 80)
                 print("Saving Output")
                 print("-" * 80)
-                save_output(final_output, config_path=config_path)
+                save_output(final_output, output_path=output_path, config_path=config_path)
 
         # Step 10: Print summary
         print("\n" + "=" * 80)
