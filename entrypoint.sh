@@ -72,7 +72,8 @@ else
 fi
 
 # Fix permissions on other writable directories
-# For mounted volumes that can't be chmod'd, use temp directories with symlinks
+# For mounted volumes that can't be chmod'd, use temp directories
+USING_TEMP_DIRS=false
 for dir in output auth_data screenshots; do
     full_path="/app/$dir"
     if [ -d "$full_path" ]; then
@@ -81,19 +82,33 @@ for dir in output auth_data screenshots; do
             log "  ✓ Fixed permissions: $full_path"
         else
             # If chmod fails, it's likely a mounted volume with restrictions
-            # Use a temp directory and create it if needed
-            log "  ⚠ Cannot chmod $full_path (likely mounted), using temp directory workaround"
-            temp_dir="/tmp/$dir"
-            mkdir -p "$temp_dir"
-            chmod 777 "$temp_dir"
-
-            # Move the original aside and symlink to temp
-            mv "$full_path" "${full_path}.orig" 2>/dev/null || true
-            ln -sf "$temp_dir" "$full_path"
-            log "  ✓ Created symlink: $full_path -> $temp_dir"
+            # Use temp directories instead
+            log "  ⚠ Cannot chmod $full_path (likely mounted), will use /tmp for writes"
+            USING_TEMP_DIRS=true
         fi
     fi
 done
+
+# If using temp directories, create them and set up copy-back
+if [ "$USING_TEMP_DIRS" = true ]; then
+    log "Setting up temporary writable directories..."
+    mkdir -p /tmp/output /tmp/auth_data /tmp/screenshots
+    chmod -R 777 /tmp/output /tmp/auth_data /tmp/screenshots
+
+    # Copy any existing files from mounted volumes to temp
+    for dir in output auth_data screenshots; do
+        if [ -d "/app/$dir" ] && [ "$(ls -A /app/$dir 2>/dev/null)" ]; then
+            log "Copying existing $dir files to temp directory..."
+            cp -r /app/$dir/* /tmp/$dir/ 2>/dev/null || true
+        fi
+    done
+
+    # Override paths to use temp directories (Python scripts will read these)
+    export OUTPUT_DIR="/tmp/output"
+    export AUTH_DATA_DIR="/tmp/auth_data"
+    export SCREENSHOTS_DIR="/tmp/screenshots"
+    log "  ✓ Temporary directories ready, files will be copied back after completion"
+fi
 
 # Environment variable information
 log "Environment Configuration:"
@@ -181,17 +196,25 @@ else
 fi
 
 # Step 8: Copy files from temp directories back to mounted volumes
-log "Copying files from temp directories to mounted volumes..."
-for dir in output auth_data screenshots; do
-    temp_dir="/tmp/$dir"
-    orig_dir="/app/${dir}.orig"
+if [ "$USING_TEMP_DIRS" = true ]; then
+    log "Copying files from temp directories back to mounted volumes..."
+    for dir in output auth_data screenshots; do
+        temp_dir="/tmp/$dir"
+        mount_dir="/app/$dir"
 
-    if [ -L "/app/$dir" ] && [ -d "$temp_dir" ] && [ -d "$orig_dir" ]; then
-        log "Copying $dir files from temp to mounted volume..."
-        cp -r "$temp_dir"/* "$orig_dir/" 2>/dev/null || true
-        log "  ✓ Copied $dir files"
-    fi
-done
+        if [ -d "$temp_dir" ] && [ -d "$mount_dir" ]; then
+            log "Copying $dir files from temp to mounted volume..."
+            # Use cp with force to overwrite read-only mounts
+            cp -rf "$temp_dir"/* "$mount_dir/" 2>/dev/null || \
+            # If that fails, try with sudo or just log warning
+            log "  ⚠ Could not copy $dir files back (mount may be read-only)"
+
+            if [ -f "$mount_dir/$(ls $temp_dir | head -1)" ] 2>/dev/null; then
+                log "  ✓ Successfully copied $dir files to mounted volume"
+            fi
+        fi
+    done
+fi
 
 # Step 9: Report workflow exit code
 if [ $WORKFLOW_EXIT_CODE -eq 0 ]; then

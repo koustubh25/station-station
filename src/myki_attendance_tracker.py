@@ -208,7 +208,9 @@ def main() -> int:
         print("\n" + "-" * 80)
         print("Loading Existing Output")
         print("-" * 80)
-        existing_output = load_existing_output()
+        # Support environment variable override for Docker permission issues
+        output_path = os.path.join(os.getenv('OUTPUT_DIR', 'output'), 'attendance.json')
+        existing_output = load_existing_output(output_path)
 
         # Step 6: Initialize results tracking
         successes = []

@@ -396,7 +396,8 @@ class MykiAuthenticator:
             auth_request_data: Authentication request and response data
         """
         # Create auth_data directory if it doesn't exist
-        auth_data_dir = Path('auth_data')
+        # Support environment variable override for Docker permission issues
+        auth_data_dir = Path(os.getenv('AUTH_DATA_DIR', 'auth_data'))
         auth_data_dir.mkdir(exist_ok=True)
 
         # Get session suffix for multi-user support
@@ -505,7 +506,8 @@ class MykiAuthenticator:
 
                     if not form_found or not form_enabled:
                         # Take screenshot
-                        screenshot_path = 'screenshots/auth_form_not_ready.png'
+                        screenshots_dir = os.getenv('SCREENSHOTS_DIR', 'screenshots')
+                        screenshot_path = os.path.join(screenshots_dir, 'auth_form_not_ready.png')
                         page.screenshot(path=screenshot_path, full_page=True)
                         print(f"\n  ✗ Login form not ready. Screenshot: {screenshot_path}")
                         return (None, None, None, False)
