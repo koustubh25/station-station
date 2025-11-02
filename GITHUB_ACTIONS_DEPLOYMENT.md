@@ -4,17 +4,46 @@
 
 This guide explains how to deploy the Myki Transaction Tracker using GitHub Actions with Docker.
 
+**NEW:** This project now uses Docker Hub registry to store pre-built images, making workflows faster and more efficient!
+
+## Architecture
+
+The deployment uses **two separate workflows**:
+
+1. **Build and Push Workflow** (`.github/workflows/docker-build-push.yml`)
+   - Builds multi-architecture Docker image (AMD64 + ARM64)
+   - Pushes to Docker Hub registry
+   - Triggers when Docker-related files change
+   - Takes 5-10 minutes
+
+2. **Run Workflow** (`.github/workflows/myki-tracker-docker.yml`)
+   - Pulls pre-built image from Docker Hub
+   - Runs the Myki tracker
+   - Uploads results and commits to repository
+   - Takes 2-3 minutes (much faster!)
+
 ## What Gets Deployed
 
-The GitHub Actions workflow (`.github/workflows/myki-tracker-docker.yml`) will:
-1. Build the Docker image on AMD64 Linux
+The run workflow (`.github/workflows/myki-tracker-docker.yml`) will:
+1. Pull the pre-built Docker image from Docker Hub
 2. Run the Myki tracker in a Docker container with Xvfb virtual display
 3. Upload results (attendance.json) as artifacts
 4. Optionally commit results back to the repository
 
 ## Prerequisites
 
-### 1. Push Code to GitHub
+### 1. Docker Hub Setup (Required)
+
+**Before anything else, set up Docker Hub registry.**
+
+See **[DOCKER_HUB_SETUP.md](DOCKER_HUB_SETUP.md)** for complete instructions.
+
+Quick summary:
+1. Create Docker Hub account (free)
+2. Generate access token
+3. Add `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` to GitHub secrets
+
+### 2. Push Code to GitHub
 
 First, push your code to a GitHub repository:
 
@@ -30,31 +59,70 @@ git branch -M main
 git push -u origin main
 ```
 
-### 2. Configure GitHub Secrets
+### 3. Configure GitHub Secrets
 
-Add your Myki password as a GitHub Secret:
+Add the following secrets to your repository:
 
 1. Go to your repository on GitHub
 2. Click **Settings** → **Secrets and variables** → **Actions**
 3. Click **New repository secret**
-4. Add the following secret:
+4. Add these three secrets:
+
+**Docker Hub credentials:**
+   - Name: `DOCKERHUB_USERNAME`
+   - Value: Your Docker Hub username
+
+   - Name: `DOCKERHUB_TOKEN`
+   - Value: Your Docker Hub access token (not password!)
+
+**Myki credentials:**
    - Name: `MYKI_PASSWORD_KOUSTUBH25`
    - Value: Your actual Myki password
 
-**Important:** The secret name must match the username pattern `MYKI_PASSWORD_{USERNAME_UPPERCASE}`
+**Important:**
+- The password secret name must match the username pattern `MYKI_PASSWORD_{USERNAME_UPPERCASE}`
+- For multiple users, add additional password secrets (e.g., `MYKI_PASSWORD_JOHN`)
+- Never commit passwords to the repository!
 
-### 3. Verify Configuration Files
+### 4. Verify Configuration Files
 
 Ensure these files exist in your repository:
-- `config/myki_config.json` - User configuration
+- `config/myki_config.json` - User configuration (safe to commit - contains card numbers, not passwords)
+- `config/myki_config.example.json` - Example configuration
 - `Dockerfile` - Docker image definition
 - `entrypoint.sh` - Container startup script
-- `docker-build.sh` - Build script
 - `docker-run.sh` - Run script
 - `docker-health-check.sh` - Validation script
-- `.github/workflows/myki-tracker-docker.yml` - Workflow definition
+- `.github/workflows/docker-build-push.yml` - Build workflow
+- `.github/workflows/myki-tracker-docker.yml` - Run workflow
 
-## Running the Workflow
+## Initial Setup: Build and Push Image
+
+**IMPORTANT:** Before running the tracker, you must build and push the Docker image to Docker Hub.
+
+### Trigger the Build Workflow
+
+1. Go to your repository on GitHub
+2. Click **Actions** tab
+3. Select **Build and Push Docker Image** workflow
+4. Click **Run workflow** button
+5. Select branch: `main`
+6. Click **Run workflow**
+
+This will:
+- Build multi-architecture image (AMD64 + ARM64)
+- Push to Docker Hub as `{your-username}/mykitracker:latest`
+- Take approximately 5-10 minutes
+
+### Verify Image on Docker Hub
+
+1. Go to https://hub.docker.com/
+2. Navigate to **Repositories**
+3. Find `{your-username}/mykitracker`
+4. Verify tags: `latest`, `main-{sha}`
+5. Verify architectures: `linux/amd64`, `linux/arm64`
+
+## Running the Tracker
 
 ### Manual Trigger (Recommended for First Test)
 
@@ -67,33 +135,47 @@ Ensure these files exist in your repository:
 
 ### Automatic Triggers
 
-The workflow will automatically run:
+The **run workflow** will automatically run:
 
 **Daily Schedule:**
 - Runs every day at 9 AM UTC (8 PM AEDT in Melbourne)
 - Cron expression: `0 9 * * *`
 
-**On Code Changes:**
-- Triggers when you push changes to:
-  - `src/**` (source code)
-  - `Dockerfile`
-  - `entrypoint.sh`
-  - `docker-*.sh` scripts
-  - Workflow file itself
+**After Successful Build:**
+- Automatically runs when the build workflow completes successfully
+- Ensures the latest image is always tested after building
 
-## Monitoring the Workflow
+**Workflow:**
+1. You push code changes (src/, Dockerfile, etc.)
+2. Build workflow triggers and pushes image to Docker Hub
+3. Run workflow triggers automatically after successful build
+4. Run workflow pulls the new image and tests it
 
-### View Workflow Logs
+**Note:**
+- The run workflow only triggers automatically after a **successful** build
+- Failed builds won't trigger the run workflow
+
+## Monitoring the Workflows
+
+### View Build Workflow Logs
 
 1. Go to **Actions** tab
-2. Click on the workflow run
-3. Click on the job name "Run Myki Tracker in Docker"
-4. View logs for each step
+2. Click on **Build and Push Docker Image** workflow
+3. View recent runs
+4. Check for successful image push
+
+### View Run Workflow Logs
+
+1. Go to **Actions** tab
+2. Click on **Myki Tracker - Docker Deployment** workflow
+3. Click on the workflow run
+4. Click on the job name "Run Myki Tracker in Docker"
+5. View logs for each step
 
 ### Check for Success
 
-Look for these indicators:
-- ✅ "Build Docker image" step completes successfully
+Look for these indicators in the **run workflow**:
+- ✅ "Pull Docker image from Docker Hub" step completes successfully
 - ✅ "Run Myki Tracker in Docker" step exits with code 0
 - ✅ "Validate output" step passes health check
 - ✅ Artifacts uploaded with attendance results

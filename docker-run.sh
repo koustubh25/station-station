@@ -55,6 +55,11 @@ for DIR in "${REQUIRED_DIRS[@]}"; do
     fi
 done
 
+# Fix permissions for mounted directories
+# Docker container runs as UID 1000, so ensure directories are writable
+log "Setting permissions for mounted directories..."
+chmod -R 755 "$SCRIPT_DIR/browser_profile" "$SCRIPT_DIR/output" "$SCRIPT_DIR/auth_data" "$SCRIPT_DIR/screenshots" 2>/dev/null || true
+
 # Verify config file exists
 CONFIG_FILE="$SCRIPT_DIR/config/myki_config.json"
 if [ ! -f "$CONFIG_FILE" ]; then

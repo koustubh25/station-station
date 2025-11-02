@@ -120,8 +120,12 @@ After pushing, configure these secrets in GitHub:
 1. Go to repository **Settings** → **Secrets and variables** → **Actions**
 2. Add secrets:
    - `MYKI_PASSWORD_KOUSTUBH25` = Your real Myki password
+   - `DOCKERHUB_USERNAME` = Your Docker Hub username
+   - `DOCKERHUB_TOKEN` = Your Docker Hub access token
 
-**Never commit passwords to the repository!**
+**Important:**
+- Never commit passwords to the repository!
+- Config file (`config/myki_config.json`) is safe to commit (contains only card numbers and station names, no passwords)
 
 ## Post-Push Verification
 

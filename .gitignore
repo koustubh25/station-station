@@ -51,9 +51,9 @@ cookies*.json
 headers*.json
 auth_request*.json
 
-# User configuration files (CRITICAL - contain sensitive card numbers and personal info!)
+# User configuration files (old format - deprecated)
 config/myki_tracker_config.json
-# Keep only example configs
+# Keep example configs
 !config/*.example.json
 
 # Output files (may contain personal attendance data)

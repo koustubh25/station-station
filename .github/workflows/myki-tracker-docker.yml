@@ -9,16 +9,13 @@ on:
   schedule:
     - cron: '0 9 * * *'
 
-  # Trigger on push to main (for testing)
-  push:
+  # Trigger after build workflow completes successfully
+  workflow_run:
+    workflows: ["Build and Push Docker Image"]
+    types:
+      - completed
     branches:
       - main
-    paths:
-      - 'src/**'
-      - 'Dockerfile'
-      - 'entrypoint.sh'
-      - 'docker-*.sh'
-      - '.github/workflows/myki-tracker-docker.yml'
 
 # Permissions needed for the workflow to commit back to the repository
 permissions:
@@ -29,18 +26,29 @@ jobs:
   run-myki-tracker:
     name: Run Myki Tracker in Docker
     runs-on: ubuntu-latest
+    # Only run if triggered by workflow_dispatch, schedule, or successful build
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule' ||
+      (github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success')
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker image
+      - name: Pull Docker image from Docker Hub
         run: |
-          echo "Building Docker image..."
-          ./docker-build.sh
+          echo "Pulling Docker image from Docker Hub..."
+          docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mykitracker:latest
+
+          echo "Tagging image as myki-tracker:latest for local use..."
+          docker tag ${{ secrets.DOCKERHUB_USERNAME }}/mykitracker:latest myki-tracker:latest
 
           echo "Verifying image..."
           docker images | grep myki-tracker
@@ -50,11 +58,20 @@ jobs:
           echo "Creating required directories..."
           mkdir -p browser_profile output auth_data screenshots
 
+          echo "Setting permissions for directories..."
+          chmod -R 755 browser_profile output auth_data screenshots
+
           echo "Creating .env file from secrets..."
           cat > .env << EOF
           # Myki Authentication Credentials
           MYKI_PASSWORD_KOUSTUBH25=${{ secrets.MYKI_PASSWORD_KOUSTUBH25 }}
           EOF
+
+          echo "Verifying config file exists..."
+          if [ ! -f config/myki_config.json ]; then
+            echo "ERROR: config/myki_config.json not found in repository!"
+            exit 1
+          fi
 
           echo "Configuration ready"
 
