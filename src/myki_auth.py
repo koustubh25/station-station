@@ -529,7 +529,8 @@ class MykiAuthenticator:
                     dashboard_loaded = self.wait_for_dashboard(page)
 
                     if not dashboard_loaded:
-                        screenshot_path = 'screenshots/auth_dashboard_failed.png'
+                        screenshots_dir = os.getenv('SCREENSHOTS_DIR', 'screenshots')
+                        screenshot_path = os.path.join(screenshots_dir, 'auth_dashboard_failed.png')
                         page.screenshot(path=screenshot_path, full_page=True)
                         print(f"\n  ✗ Dashboard not loaded. Screenshot: {screenshot_path}")
                         return (None, None, None, False)
@@ -553,8 +554,10 @@ class MykiAuthenticator:
                     self.save_auth_data(cookies, headers, auth_request_data)
 
                     # Take success screenshot
-                    page.screenshot(path='screenshots/auth_success.png', full_page=True)
-                    print("\nScreenshot saved: screenshots/auth_success.png")
+                    screenshots_dir = os.getenv('SCREENSHOTS_DIR', 'screenshots')
+                    screenshot_path = os.path.join(screenshots_dir, 'auth_success.png')
+                    page.screenshot(path=screenshot_path, full_page=True)
+                    print(f"\nScreenshot saved: {screenshot_path}")
 
                     # Keep browser open briefly
                     print("\nKeeping browser open for 5 seconds...")

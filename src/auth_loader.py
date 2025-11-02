@@ -31,7 +31,8 @@ def load_session_data() -> Tuple[Optional[Dict], Optional[Dict], Optional[Dict],
         Returns (None, None, None, None) if files don't exist
     """
     suffix = get_session_suffix()
-    session_file = Path('auth_data') / f'session{suffix}.json'
+    auth_data_dir = Path(os.getenv('AUTH_DATA_DIR', 'auth_data'))
+    session_file = auth_data_dir / f'session{suffix}.json'
 
     if not session_file.exists():
         print(f"Session file not found: {session_file}")
@@ -66,7 +67,8 @@ def load_cookies() -> Optional[Dict]:
         Cookie dictionary or None if file doesn't exist
     """
     suffix = get_session_suffix()
-    cookies_file = Path('auth_data') / f'cookies{suffix}.json'
+    auth_data_dir = Path(os.getenv('AUTH_DATA_DIR', 'auth_data'))
+    cookies_file = auth_data_dir / f'cookies{suffix}.json'
 
     if not cookies_file.exists():
         print(f"Cookies file not found: {cookies_file}")
@@ -88,7 +90,8 @@ def load_headers() -> Optional[Dict]:
         Headers dictionary or None if file doesn't exist
     """
     suffix = get_session_suffix()
-    headers_file = Path('auth_data') / f'headers{suffix}.json'
+    auth_data_dir = Path(os.getenv('AUTH_DATA_DIR', 'auth_data'))
+    headers_file = auth_data_dir / f'headers{suffix}.json'
 
     if not headers_file.exists():
         print(f"Headers file not found: {headers_file}")
@@ -110,7 +113,8 @@ def load_auth_request_data() -> Optional[Dict]:
         Auth request dictionary or None if file doesn't exist
     """
     suffix = get_session_suffix()
-    auth_request_file = Path('auth_data') / f'auth_request{suffix}.json'
+    auth_data_dir = Path(os.getenv('AUTH_DATA_DIR', 'auth_data'))
+    auth_request_file = auth_data_dir / f'auth_request{suffix}.json'
 
     if not auth_request_file.exists():
         print(f"Auth request file not found: {auth_request_file}")
