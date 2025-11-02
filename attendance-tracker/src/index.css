@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+@theme {
+  --color-attended: #ef4444;
+}
