@@ -392,7 +392,14 @@ def update_user_output(
     user_data["lastUpdated"] = current_timestamp
     print(f"    Updated lastUpdated: {current_timestamp}")
 
-    # Step 5: Calculate statistics (if date range provided)
+    # Step 5: Add skip dates to output (convert date objects to ISO strings)
+    if skip_dates is not None:
+        skip_dates_iso = [d.strftime('%Y-%m-%d') for d in skip_dates]
+        skip_dates_iso.sort()  # Sort chronologically
+        user_data["skipDates"] = skip_dates_iso
+        print(f"    Added {len(skip_dates_iso)} skip dates to output")
+
+    # Step 6: Calculate statistics (if date range provided)
     if start_date is not None and end_date is not None and skip_dates is not None and vic_holidays is not None:
         statistics = calculate_statistics(
             attendance_days=unique_days,
