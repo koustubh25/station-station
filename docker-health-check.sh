@@ -48,7 +48,7 @@ if [ "$CONTAINER_EXIT_CODE" = "0" ]; then
     ((CHECKS_PASSED++))
 elif [ "$CONTAINER_EXIT_CODE" = "N/A" ]; then
     log "INFO: Container not found or already removed (--rm flag used)"
-    log "INFO: Skipping container exit code check"
+    log "INFO: Skipping container exit code check (will validate via output file instead)"
 else
     log_error "FAIL: Container exit code is $CONTAINER_EXIT_CODE (expected 0)"
     HEALTH_ERRORS+=("Container exit code: $CONTAINER_EXIT_CODE (expected 0)")
@@ -137,51 +137,53 @@ else
     ((CHECKS_FAILED++))
 fi
 
-# Check 4: attendance.json contains expected fields (date, users, attendance data)
+# Check 4: attendance.json contains expected fields (metadata, user data)
 log "Check 4: Verifying attendance.json contains expected fields"
 
 if [ -f "$OUTPUT_FILE" ]; then
     FIELDS_VALID=true
 
-    # Check for 'date' field
+    # Check for 'metadata' field
     if command -v jq &> /dev/null; then
-        if jq -e '.date' "$OUTPUT_FILE" > /dev/null 2>&1; then
-            log "  - Field 'date' found"
+        if jq -e '.metadata' "$OUTPUT_FILE" > /dev/null 2>&1; then
+            log "  - Field 'metadata' found"
         else
-            log_error "  - Field 'date' NOT found"
+            log_error "  - Field 'metadata' NOT found"
             FIELDS_VALID=false
         fi
 
-        # Check for 'users' field
-        if jq -e '.users' "$OUTPUT_FILE" > /dev/null 2>&1; then
-            log "  - Field 'users' found"
+        # Check that file has at least one user key (any key except 'metadata')
+        USER_COUNT=$(jq 'keys | map(select(. != "metadata")) | length' "$OUTPUT_FILE" 2>/dev/null || echo "0")
+        if [ "$USER_COUNT" -gt 0 ]; then
+            log "  - Found $USER_COUNT user(s) in output file"
         else
-            log_error "  - Field 'users' NOT found"
+            log_error "  - No user data found in output file"
             FIELDS_VALID=false
         fi
     else
         # Fallback to Python
-        if python3 -c "import json; data=json.load(open('$OUTPUT_FILE')); assert 'date' in data" 2>/dev/null; then
-            log "  - Field 'date' found"
+        if python3 -c "import json; data=json.load(open('$OUTPUT_FILE')); assert 'metadata' in data" 2>/dev/null; then
+            log "  - Field 'metadata' found"
         else
-            log_error "  - Field 'date' NOT found"
+            log_error "  - Field 'metadata' NOT found"
             FIELDS_VALID=false
         fi
 
-        if python3 -c "import json; data=json.load(open('$OUTPUT_FILE')); assert 'users' in data" 2>/dev/null; then
-            log "  - Field 'users' found"
+        USER_COUNT=$(python3 -c "import json; data=json.load(open('$OUTPUT_FILE')); print(len([k for k in data.keys() if k != 'metadata']))" 2>/dev/null || echo "0")
+        if [ "$USER_COUNT" -gt 0 ]; then
+            log "  - Found $USER_COUNT user(s) in output file"
         else
-            log_error "  - Field 'users' NOT found"
+            log_error "  - No user data found in output file"
             FIELDS_VALID=false
         fi
     fi
 
     if [ "$FIELDS_VALID" = true ]; then
-        log_success "PASS: Output file contains expected fields (date, users)"
+        log_success "PASS: Output file contains expected fields (metadata, user data)"
         ((CHECKS_PASSED++))
     else
         log_error "FAIL: Output file missing required fields"
-        HEALTH_ERRORS+=("Output file missing required fields (date, users)")
+        HEALTH_ERRORS+=("Output file missing required fields (metadata, user data)")
         ((CHECKS_FAILED++))
     fi
 else

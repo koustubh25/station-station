@@ -96,11 +96,12 @@ jobs:
           ./docker-health-check.sh
         continue-on-error: true
 
-      - name: Display container logs
+      - name: Display run script output
         if: always()
         run: |
-          echo "=== Docker Container Logs ==="
-          docker logs myki-tracker-run 2>&1 || echo "Container not found or already removed"
+          echo "=== Docker Run Output ==="
+          echo "Container was run with --rm flag and has been auto-removed"
+          echo "Check the 'Run Myki Tracker in Docker' step output above for logs"
 
       - name: Upload attendance results
         if: success()
