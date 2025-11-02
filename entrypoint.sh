@@ -46,7 +46,33 @@ log "=================================="
 # This is critical for GitHub Actions where mounted volumes may have restrictive permissions
 log "Fixing permissions on mounted directories..."
 CHROME_PROFILE_DIR="${CHROME_PROFILE_DIR:-/app/browser_profile}"
-for dir in /app/output /app/auth_data /app/screenshots "$CHROME_PROFILE_DIR"; do
+
+# For browser profile, copy to a local directory if mounted (to avoid permission issues)
+if [ -d "$CHROME_PROFILE_DIR" ] && mountpoint -q "$CHROME_PROFILE_DIR" 2>/dev/null; then
+    log "Browser profile is mounted, copying to local directory to avoid permission issues..."
+    TEMP_PROFILE_DIR="/tmp/chrome_profile"
+    mkdir -p "$TEMP_PROFILE_DIR"
+    chmod 777 "$TEMP_PROFILE_DIR"
+
+    # Copy existing profile if it has content
+    if [ "$(ls -A $CHROME_PROFILE_DIR 2>/dev/null)" ]; then
+        log "Copying existing profile from $CHROME_PROFILE_DIR to $TEMP_PROFILE_DIR"
+        cp -r "$CHROME_PROFILE_DIR"/* "$TEMP_PROFILE_DIR/" 2>/dev/null || true
+    fi
+
+    # Override the profile directory to use the temp location
+    export CHROME_PROFILE_DIR="$TEMP_PROFILE_DIR"
+    log "  ✓ Using temporary profile directory: $TEMP_PROFILE_DIR"
+else
+    # Not mounted, just fix permissions
+    if [ -d "$CHROME_PROFILE_DIR" ]; then
+        chmod -R 777 "$CHROME_PROFILE_DIR" 2>/dev/null || true
+        log "  ✓ Fixed permissions: $CHROME_PROFILE_DIR"
+    fi
+fi
+
+# Fix permissions on other writable directories
+for dir in /app/output /app/auth_data /app/screenshots; do
     if [ -d "$dir" ]; then
         chmod -R 777 "$dir" 2>/dev/null || true
         log "  ✓ Fixed permissions: $dir"
