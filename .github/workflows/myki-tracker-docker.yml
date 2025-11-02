@@ -86,7 +86,18 @@ jobs:
         id: run_tracker
         run: |
           echo "Starting Myki Tracker Docker container..."
-          ./docker-run.sh
+          # Capture logs to extract attendance.json if copy fails
+          ./docker-run.sh | tee docker_run.log
+
+          # Extract attendance.json from logs if it was dumped
+          if grep -q "===== BEGIN ATTENDANCE JSON =====" docker_run.log; then
+            echo "Extracting attendance.json from container logs..."
+            mkdir -p output
+            sed -n '/===== BEGIN ATTENDANCE JSON =====/,/===== END ATTENDANCE JSON =====/p' docker_run.log | \
+              sed '1d;$d' > output/attendance.json
+            echo "✓ Attendance.json extracted from logs"
+            ls -lh output/attendance.json
+          fi
         continue-on-error: true
 
       - name: Validate output

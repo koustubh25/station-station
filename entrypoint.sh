@@ -205,12 +205,24 @@ if [ "$USING_TEMP_DIRS" = true ]; then
         if [ -d "$temp_dir" ] && [ -d "$mount_dir" ]; then
             log "Copying $dir files from temp to mounted volume..."
             # Use cp with force to overwrite read-only mounts
-            cp -rf "$temp_dir"/* "$mount_dir/" 2>/dev/null || \
-            # If that fails, try with sudo or just log warning
-            log "  ⚠ Could not copy $dir files back (mount may be read-only)"
-
-            if [ -f "$mount_dir/$(ls $temp_dir | head -1)" ] 2>/dev/null; then
+            if cp -rf "$temp_dir"/* "$mount_dir/" 2>/dev/null; then
                 log "  ✓ Successfully copied $dir files to mounted volume"
+            else
+                # If copy fails, dump the attendance.json to stdout for GitHub Actions to capture
+                log "  ⚠ Could not copy $dir files back (mount may be read-only)"
+
+                if [ "$dir" = "output" ] && [ -f "$temp_dir/attendance.json" ]; then
+                    log "Dumping attendance.json content for GitHub Actions artifact:"
+                    echo "===== BEGIN ATTENDANCE JSON ====="
+                    cat "$temp_dir/attendance.json"
+                    echo "===== END ATTENDANCE JSON ====="
+
+                    # Also try writing to mount with different approach
+                    log "Attempting to write attendance.json using redirection..."
+                    cat "$temp_dir/attendance.json" > "$mount_dir/attendance.json" 2>/dev/null && \
+                        log "  ✓ Successfully wrote attendance.json via redirection" || \
+                        log "  ⚠ Could not write attendance.json to mount"
+                fi
             fi
         fi
     done
