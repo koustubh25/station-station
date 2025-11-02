@@ -114,25 +114,6 @@ jobs:
           echo "Container was run with --rm flag and has been auto-removed"
           echo "Check the 'Run Myki Tracker in Docker' step output above for logs"
 
-      - name: Upload attendance results
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: attendance-results-${{ github.run_number }}
-          path: |
-            output/attendance.json
-          retention-days: 90
-
-      - name: Upload debug artifacts
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: debug-artifacts-${{ github.run_number }}
-          path: |
-            screenshots/*.png
-            output/**
-          retention-days: 30
-
       - name: Check workflow status
         if: always()
         run: |
@@ -140,12 +121,12 @@ jobs:
             echo "✅ Myki Tracker completed successfully!"
             exit 0
           else
-            echo "❌ Myki Tracker failed. Check logs and artifacts."
+            echo "❌ Myki Tracker failed. Check logs for details."
             exit 1
           fi
 
-      - name: Commit results to repository (optional)
-        if: success() && github.event_name == 'schedule'
+      - name: Commit results to repository
+        if: success()
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
