@@ -66,4 +66,4 @@ jobs:
           cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/mykitracker:buildcache,mode=max
 
       - name: Image digest
-        run: echo "Image pushed with digest: ${{ steps.meta.outputs.digest }}"
+        run: echo "Image pushed with digest - ${{ steps.meta.outputs.digest }}"
