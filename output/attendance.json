@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "generatedAt": "2025-11-02T07:08:42Z",
-    "configPath": "/tmp/tmpgdqjuw6s.json",
+    "generatedAt": "2025-11-02T10:15:56Z",
+    "configPath": "/tmp/tmpgls6jvvi.json",
     "totalUsers": 1
   },
   "koustubh25": {
@@ -55,7 +55,7 @@
     ],
     "latestProcessedDate": "2025-10-29T09:35:00+11:00",
     "targetStation": "Southern Cross Station",
-    "lastUpdated": "2025-11-02T07:08:42Z",
+    "lastUpdated": "2025-11-02T10:15:56Z",
     "statistics": {
       "totalWorkingDays": 138,
       "daysAttended": 46,
@@ -116,6 +116,10 @@
           "attendancePercentage": 30.43
         }
       ]
-    }
+    },
+    "skipDates": [
+      "2025-03-15",
+      "2025-06-20"
+    ]
   }
 }
