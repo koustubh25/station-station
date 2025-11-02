@@ -72,10 +72,26 @@ else
 fi
 
 # Fix permissions on other writable directories
-for dir in /app/output /app/auth_data /app/screenshots; do
-    if [ -d "$dir" ]; then
-        chmod -R 777 "$dir" 2>/dev/null || true
-        log "  ✓ Fixed permissions: $dir"
+# For mounted volumes that can't be chmod'd, use temp directories with symlinks
+for dir in output auth_data screenshots; do
+    full_path="/app/$dir"
+    if [ -d "$full_path" ]; then
+        # Try to fix permissions first
+        if chmod -R 777 "$full_path" 2>/dev/null; then
+            log "  ✓ Fixed permissions: $full_path"
+        else
+            # If chmod fails, it's likely a mounted volume with restrictions
+            # Use a temp directory and create it if needed
+            log "  ⚠ Cannot chmod $full_path (likely mounted), using temp directory workaround"
+            temp_dir="/tmp/$dir"
+            mkdir -p "$temp_dir"
+            chmod 777 "$temp_dir"
+
+            # Move the original aside and symlink to temp
+            mv "$full_path" "${full_path}.orig" 2>/dev/null || true
+            ln -sf "$temp_dir" "$full_path"
+            log "  ✓ Created symlink: $full_path -> $temp_dir"
+        fi
     fi
 done
 
@@ -164,7 +180,20 @@ else
     WORKFLOW_EXIT_CODE=$?
 fi
 
-# Step 8: Report workflow exit code
+# Step 8: Copy files from temp directories back to mounted volumes
+log "Copying files from temp directories to mounted volumes..."
+for dir in output auth_data screenshots; do
+    temp_dir="/tmp/$dir"
+    orig_dir="/app/${dir}.orig"
+
+    if [ -L "/app/$dir" ] && [ -d "$temp_dir" ] && [ -d "$orig_dir" ]; then
+        log "Copying $dir files from temp to mounted volume..."
+        cp -r "$temp_dir"/* "$orig_dir/" 2>/dev/null || true
+        log "  ✓ Copied $dir files"
+    fi
+done
+
+# Step 9: Report workflow exit code
 if [ $WORKFLOW_EXIT_CODE -eq 0 ]; then
     log "=================================="
     log "Workflow completed successfully"
