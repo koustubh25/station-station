@@ -114,8 +114,9 @@ ${t}`,qR=Object.getOwnPropertyDescriptor(Function.prototype,"toString"),$R=Objec
           color: #6b7280;
         }
 
+        /* Remove red color from weekends to avoid confusion with attended days */
         .react-calendar__month-view__days__day--weekend {
-          color: #ef4444;
+          color: inherit;
         }
 
         @media (max-width: 640px) {
