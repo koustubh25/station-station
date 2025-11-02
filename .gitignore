@@ -57,8 +57,9 @@ config/myki_tracker_config.json
 !config/*.example.json
 
 # Output files (may contain personal attendance data)
-output/
-attendance*.json
+output/*
+# But allow attendance.json to be committed for frontend access
+!output/attendance.json
 
 # Chrome profile (CRITICAL - contains browsing history, cookies, personal data!)
 browser_profile/
