@@ -5,9 +5,9 @@ on:
   # Manual trigger
   workflow_dispatch:
 
-  # Scheduled run (daily at 9 AM UTC = 8 PM AEDT in Melbourne)
+  # Scheduled run (daily at 11 AM Melbourne time - midnight UTC = 11 AM AEDT / 10 AM AEST)
   schedule:
-    - cron: '0 9 * * *'
+    - cron: '0 0 * * *'
 
   # Trigger after build workflow completes successfully
   workflow_run:

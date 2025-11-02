@@ -103,15 +103,26 @@ Deploy the working Myki transaction tracker in a Docker container with Xvfb (vir
 
 **Testing Status:**
 - ✅ Docker image builds successfully (2.58GB)
-- ⚠️ Functional testing blocked on ARM64 macOS (platform limitation)
-- ⏳ Awaiting AMD64 Linux testing via GitHub Actions
+- ✅ **Functional testing PASSED on GitHub Actions AMD64 Linux**
+- ✅ Cloudflare bypass works with empty Chrome profile in CI environment
+- ✅ Health validation passes all checks
 
-**GitHub Actions Deployment:**
+**GitHub Actions Deployment (PRODUCTION READY):**
 - Located at: `.github/workflows/myki-tracker-docker.yml`
-- Triggers: Manual (workflow_dispatch), Scheduled (daily 9 AM UTC), Push to main
+- Triggers: Manual (workflow_dispatch), Scheduled (daily 11 AM Melbourne time), Workflow completion
 - Runs Docker container on ubuntu-latest (AMD64 Linux)
-- Uploads results as artifacts
-- Optional: Commits results back to repository
+- **Commits attendance.json to repository** (not artifacts) for frontend access
+- Scheduled: Midnight UTC (`0 0 * * *`) = 11 AM AEDT / 10 AM AEST Melbourne
+- Output accessible at: `https://raw.githubusercontent.com/koustubh25/station-station/main/output/attendance.json`
+
+**Key Implementation Learnings:**
+- ✅ Empty Chrome profile sufficient for Cloudflare bypass in GitHub Actions
+- ✅ Incremental processing preserves historical data across runs
+- ✅ Environment variables redirect writes to /tmp when mounts are read-only
+- ✅ Health check skips session file validation in CI (files in /tmp)
+- ✅ JSON extraction from container logs works as fallback
+- ✅ .gitignore configured to allow attendance.json while ignoring other outputs
+- ✅ Workflow completes successfully end-to-end with all validations passing
 
 ## Out of Scope (For This Spec)
 - Cloud Run deployment configuration and cloud-specific optimizations
