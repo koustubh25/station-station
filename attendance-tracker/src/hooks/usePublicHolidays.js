@@ -27,12 +27,16 @@ export function usePublicHolidays(startDate, endDate) {
       const holidays = hd.getHolidays(year);
 
       holidays.forEach(holiday => {
-        const holidayDate = new Date(holiday.date);
+        // holiday.date is in ISO format (e.g., "2025-11-04 00:00:00")
+        // Extract just the date part (YYYY-MM-DD)
+        const dateString = holiday.date.substring(0, 10);
+
+        // Parse as local date (avoid timezone issues)
+        const [year, month, day] = dateString.split('-').map(Number);
+        const holidayDate = new Date(year, month - 1, day);
 
         // Only include if within our date range
         if (holidayDate >= startDate && holidayDate <= endDate) {
-          // Convert to YYYY-MM-DD format using local timezone
-          const dateString = holidayDate.toLocaleDateString('en-CA');
           holidaySet.add(dateString);
         }
       });
