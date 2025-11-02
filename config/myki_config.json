@@ -1,0 +1,10 @@
+{
+  "users": {
+    "koustubh25": {
+      "mykiCardNumber": "308425279093478",
+      "targetStation": "Southern Cross Station",
+      "skipDates": ["2025-03-15", "2025-06-20"],
+      "startDate": "2025-04-15"
+    }
+  }
+}
