@@ -3,7 +3,8 @@
 # Purpose: Validate container output, session data, and completion status
 # Returns: 0 if all checks pass, 1 if any fail
 
-set -e  # Exit on any error
+# Note: Not using 'set -e' because we want to continue checking all validation steps
+# even if some fail. The script will exit with code 1 at the end if any checks failed.
 
 # Logging functions
 log() {
