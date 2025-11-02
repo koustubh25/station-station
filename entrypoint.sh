@@ -215,6 +215,7 @@ if [ "$USING_TEMP_DIRS" = true ]; then
                     log "Dumping attendance.json content for GitHub Actions artifact:"
                     echo "===== BEGIN ATTENDANCE JSON ====="
                     cat "$temp_dir/attendance.json"
+                    echo ""  # Ensure newline after JSON content
                     echo "===== END ATTENDANCE JSON ====="
 
                     # Also try writing to mount with different approach
