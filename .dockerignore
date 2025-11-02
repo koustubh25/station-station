@@ -1,0 +1,68 @@
+# .dockerignore - Exclude unnecessary files from Docker build context
+# This reduces build time and image size
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Environment files (should be provided at runtime via -e or --env-file)
+.env
+.env.*
+!.env.example
+
+# Git repository
+.git/
+.gitignore
+.gitattributes
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Test files and coverage
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.tox/
+
+# Documentation and specs (not needed in runtime container)
+*.md
+!README.md
+agent-os/
+
+# Output directories (mounted as volumes at runtime)
+output/*
+!output/.gitkeep
+screenshots/*
+!screenshots/.gitkeep
+auth_data/*
+!auth_data/.gitkeep
+
+# Browser profile (mounted as volume at runtime)
+browser_profile/*
+!browser_profile/.gitkeep
+
+# Logs
+logs/
+*.log
+
+# Backup and obsolete code
+backup_obsolete_code/
+
+# Keep these files for container operation:
+# - src/ (application code)
+# - config/ (may be included or mounted)
+# - requirements.txt (for pip install)

@@ -1,0 +1,69 @@
+name: Build and Push Docker Image
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+
+  # Trigger on push to main when Docker-related files change
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'Dockerfile'
+      - 'entrypoint.sh'
+      - 'requirements.txt'
+      - '.github/workflows/docker-build-push.yml'
+
+  # Trigger on release (optional - useful for versioning)
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Image to Docker Hub
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ secrets.DOCKERHUB_USERNAME }}/mykitracker
+          tags: |
+            # Tag with 'latest' for main branch
+            type=raw,value=latest,enable={{is_default_branch}}
+            # Tag with git SHA
+            type=sha,prefix={{branch}}-
+            # Tag with release version if triggered by release
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64  # Only build for GitHub Actions runners (amd64)
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/mykitracker:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/mykitracker:buildcache,mode=max
+
+      - name: Image digest
+        run: echo "Image pushed with digest - ${{ steps.meta.outputs.digest }}"
