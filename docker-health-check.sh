@@ -43,12 +43,12 @@ log "Check 1: Verifying container exit code"
 # Get the last container's exit code if it exists
 CONTAINER_EXIT_CODE=$(docker inspect "$CONTAINER_NAME" --format='{{.State.ExitCode}}' 2>/dev/null || echo "N/A")
 
-if [ "$CONTAINER_EXIT_CODE" = "0" ]; then
-    log_success "PASS: Container exit code is 0 (success)"
-    ((CHECKS_PASSED++))
-elif [ "$CONTAINER_EXIT_CODE" = "N/A" ]; then
+if [ "$CONTAINER_EXIT_CODE" = "N/A" ]; then
     log "INFO: Container not found or already removed (--rm flag used)"
     log "INFO: Skipping container exit code check (will validate via output file instead)"
+elif [ "$CONTAINER_EXIT_CODE" = "0" ]; then
+    log_success "PASS: Container exit code is 0 (success)"
+    ((CHECKS_PASSED++))
 else
     log_error "FAIL: Container exit code is $CONTAINER_EXIT_CODE (expected 0)"
     HEALTH_ERRORS+=("Container exit code: $CONTAINER_EXIT_CODE (expected 0)")
