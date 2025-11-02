@@ -42,6 +42,17 @@ log "=================================="
 log "Myki Tracker Docker Container"
 log "=================================="
 
+# Fix permissions on mounted directories
+# This is critical for GitHub Actions where mounted volumes may have restrictive permissions
+log "Fixing permissions on mounted directories..."
+CHROME_PROFILE_DIR="${CHROME_PROFILE_DIR:-/app/browser_profile}"
+for dir in /app/output /app/auth_data /app/screenshots "$CHROME_PROFILE_DIR"; do
+    if [ -d "$dir" ]; then
+        chmod -R 777 "$dir" 2>/dev/null || true
+        log "  ✓ Fixed permissions: $dir"
+    fi
+done
+
 # Environment variable information
 log "Environment Configuration:"
 log "  DISPLAY: ${DISPLAY:-<not set>}"
