@@ -20,7 +20,8 @@ log "Running Myki Tracker Docker Container"
 log "=================================="
 
 # Configuration
-IMAGE_NAME="myki-tracker:local-v1"
+# Allow overriding image name via environment variable or command line argument
+IMAGE_NAME="${1:-${DOCKER_IMAGE_NAME:-myki-tracker:latest}}"
 CONTAINER_NAME="myki-tracker-run"
 
 # Get script directory
