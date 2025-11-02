@@ -1,0 +1,104 @@
+# Python virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# Environment variables with credentials (CRITICAL - contains passwords!)
+.env
+.env.*
+!.env.example
+
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Logs
+logs/
+*.log
+
+# Screenshots for debugging (may contain sensitive data)
+screenshots/
+*.png
+*.jpg
+*.jpeg
+
+# Authentication data (CRITICAL - contains sensitive cookies, headers, bearer tokens!)
+auth_data/
+session_*.json
+bearer_token*.txt
+cookies*.json
+headers*.json
+auth_request*.json
+
+# User configuration files (CRITICAL - contain sensitive card numbers and personal info!)
+config/myki_config.json
+config/myki_tracker_config.json
+# Keep only example configs
+!config/*.example.json
+
+# Output files (may contain personal attendance data)
+output/
+attendance*.json
+
+# Chrome profile (CRITICAL - contains browsing history, cookies, personal data!)
+browser_profile/
+# Note: Profile should be prepared locally, not committed
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Playwright cache
+.playwright/
+
+# pytest cache
+.pytest_cache/
+
+# Docker build context temporary files
+.dockerignore.tmp
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+._*
+
+# GitHub Actions artifacts (for local testing)
+artifacts/
+
+# Backup files
+*.bak
+*.backup
+
+# Database files (if any)
+*.db
+*.sqlite
+*.sqlite3

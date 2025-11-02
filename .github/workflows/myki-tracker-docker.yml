@@ -1,0 +1,128 @@
+name: Myki Tracker - Docker Deployment
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+
+  # Scheduled run (daily at 9 AM UTC = 8 PM AEDT in Melbourne)
+  schedule:
+    - cron: '0 9 * * *'
+
+  # Trigger on push to main (for testing)
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**'
+      - 'Dockerfile'
+      - 'entrypoint.sh'
+      - 'docker-*.sh'
+      - '.github/workflows/myki-tracker-docker.yml'
+
+# Permissions needed for the workflow to commit back to the repository
+permissions:
+  contents: write  # Allows pushing commits
+  actions: read    # Allows reading workflow status
+
+jobs:
+  run-myki-tracker:
+    name: Run Myki Tracker in Docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: |
+          echo "Building Docker image..."
+          ./docker-build.sh
+
+          echo "Verifying image..."
+          docker images | grep myki-tracker
+
+      - name: Prepare configuration
+        run: |
+          echo "Creating required directories..."
+          mkdir -p browser_profile output auth_data screenshots
+
+          echo "Creating .env file from secrets..."
+          cat > .env << EOF
+          # Myki Authentication Credentials
+          MYKI_PASSWORD_KOUSTUBH25=${{ secrets.MYKI_PASSWORD_KOUSTUBH25 }}
+          EOF
+
+          echo "Configuration ready"
+
+      - name: Prepare Chrome profile (if available)
+        run: |
+          # If you have a pre-warmed Chrome profile stored as a GitHub artifact
+          # or in a separate repository, download it here
+          # For now, we'll use an empty profile (first-run scenario)
+          echo "Using empty Chrome profile for first run"
+
+      - name: Run Myki Tracker in Docker
+        id: run_tracker
+        run: |
+          echo "Starting Myki Tracker Docker container..."
+          ./docker-run.sh
+        continue-on-error: true
+
+      - name: Validate output
+        id: validate
+        run: |
+          echo "Running health check..."
+          ./docker-health-check.sh
+        continue-on-error: true
+
+      - name: Display container logs
+        if: always()
+        run: |
+          echo "=== Docker Container Logs ==="
+          docker logs myki-tracker-run 2>&1 || echo "Container not found or already removed"
+
+      - name: Upload attendance results
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: attendance-results-${{ github.run_number }}
+          path: |
+            output/attendance.json
+          retention-days: 90
+
+      - name: Upload debug artifacts
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-artifacts-${{ github.run_number }}
+          path: |
+            screenshots/*.png
+            output/**
+          retention-days: 30
+
+      - name: Check workflow status
+        if: always()
+        run: |
+          if [ "${{ steps.run_tracker.outcome }}" == "success" ] && [ "${{ steps.validate.outcome }}" == "success" ]; then
+            echo "✅ Myki Tracker completed successfully!"
+            exit 0
+          else
+            echo "❌ Myki Tracker failed. Check logs and artifacts."
+            exit 1
+          fi
+
+      - name: Commit results to repository (optional)
+        if: success() && github.event_name == 'schedule'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          # Only commit if there are changes
+          if [ -f output/attendance.json ]; then
+            git add output/attendance.json
+            git commit -m "chore: update attendance data [skip ci]" || echo "No changes to commit"
+            git push || echo "Nothing to push"
+          fi

@@ -1,0 +1,54 @@
+{
+  "_comment": "Unified Myki Configuration - Multi-user support with separate Myki accounts",
+  "_instructions": {
+    "1_copy": "Copy this file to config/myki_config.json",
+    "2_configure_users": "Each key (e.g. 'koustubh') is both the config name AND the Myki username",
+    "3_set_passwords": "For each user, set environment variable: export MYKI_PASSWORD_{USERNAME}='password'",
+    "4_example": "For user 'koustubh', set: export MYKI_PASSWORD_KOUSTUBH='password_here'",
+    "5_run": "python src/run_myki_workflow.py"
+  },
+
+  "users": {
+    "koustubh": {
+      "mykiCardNumber": "123456789012345",
+      "targetStation": "Heathmont Station",
+      "skipDates": ["2025-03-15", "2025-06-20"],
+      "startDate": "2025-04-15",
+      "endDate": "2025-06-15",
+
+      "_field_notes": {
+        "mykiCardNumber": "String, 16-digit Myki card number (REQUIRED)",
+        "targetStation": "String, exact station name, case-sensitive (REQUIRED)",
+        "skipDates": "Array of YYYY-MM-DD dates to exclude (OPTIONAL - defaults to [])",
+        "startDate": "String, YYYY-MM-DD format, inclusive start (REQUIRED)",
+        "endDate": "String, YYYY-MM-DD format, inclusive end (OPTIONAL - defaults to today)"
+      },
+      "_username_note": "The key 'koustubh' IS the Myki username used for login",
+      "_password_note": "Set environment variable: export MYKI_PASSWORD_KOUSTUBH='password_here'"
+    },
+
+    "john": {
+      "mykiCardNumber": "123456789012345",
+      "targetStation": "Melbourne Central",
+      "startDate": "2025-01-01",
+      "endDate": "2025-12-31",
+      "_username_note": "The key 'john' IS the Myki username used for login",
+      "_password_note": "Set environment variable: export MYKI_PASSWORD_JOHN='password_here'",
+      "_note": "Each user is a separate Myki account - they can track different cards/stations"
+    }
+  },
+
+  "_multi_user_explanation": {
+    "scenario": "Multiple people, each with their own Myki account",
+    "example": "User 'koustubh' logs in with username 'koustubh', User 'john' logs in with username 'john'",
+    "authentication": "Phase 1 authenticates EACH user separately and saves individual sessions",
+    "tracking": "Phase 2 uses each user's session to fetch their transaction data",
+    "benefit": "One tool can track attendance for multiple people automatically",
+    "simplicity": "Config key = Myki username (no separate mykiUsername field needed)"
+  },
+
+  "_working_days_info": {
+    "definition": "Monday-Friday, excluding Melbourne VIC public holidays and user skip dates",
+    "attendance_rule": "Day marked attended if ≥1 'Touch off' at targetStation on working day"
+  }
+}
