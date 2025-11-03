@@ -20,7 +20,7 @@ This guide helps you migrate from the old configuration format to the new secure
 
 **New Format** (Credentials in environment variables):
 
-**config/myki_tracker_config.json**:
+**config/myki_config.json** (formerly `myki_tracker_config.json`):
 ```json
 {
   "koustubh": {
@@ -107,7 +107,7 @@ You can now track days when you drove to work instead of using public transport.
 
 ### Step 2: Update Config File
 
-1. Open `config/myki_tracker_config.json`
+1. Open `config/myki_config.json` (formerly `myki_tracker_config.json`)
 
 2. Remove credential fields (if present):
    - Remove `"mykiUsername"` field
