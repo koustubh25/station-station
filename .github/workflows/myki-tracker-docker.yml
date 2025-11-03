@@ -169,14 +169,12 @@ jobs:
             echo "✓ Attendance.json extracted from logs"
             ls -lh output/attendance.json
           fi
-        continue-on-error: true
 
       - name: Validate output
         id: validate
         run: |
           echo "Running health check..."
           ./docker-health-check.sh
-        continue-on-error: true
 
       - name: Display run script output
         if: always()
@@ -184,17 +182,6 @@ jobs:
           echo "=== Docker Run Output ==="
           echo "Container was run with --rm flag and has been auto-removed"
           echo "Check the 'Run Myki Tracker in Docker' step output above for logs"
-
-      - name: Check workflow status
-        if: always()
-        run: |
-          if [ "${{ steps.run_tracker.outcome }}" == "success" ] && [ "${{ steps.validate.outcome }}" == "success" ]; then
-            echo "✅ Myki Tracker completed successfully!"
-            exit 0
-          else
-            echo "❌ Myki Tracker failed. Check logs for details."
-            exit 1
-          fi
 
       - name: Commit results to repository
         if: success()
