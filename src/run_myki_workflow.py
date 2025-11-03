@@ -231,8 +231,10 @@ def main():
     temp_config_file = None
     try:
         # Write users config to temporary file
+        # Note: user_config is already extracted from the "users" section,
+        # so we need to wrap it back in "users" for load_unified_config() to work
         with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
-            json.dump(user_config, f, indent=2)
+            json.dump({"users": user_config}, f, indent=2)
             temp_config_file = f.name
 
         print(f"Created temporary config for Phase 2: {temp_config_file}")
