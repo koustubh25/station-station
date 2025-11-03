@@ -55,15 +55,15 @@ jobs:
 
       - name: Prepare configuration
         env:
-          # Pass all secrets as environment variables
-          # For each user in your config, add their 3 secrets here:
-          MYKI_USERNAME_KOUSTUBH: ${{ secrets.MYKI_USERNAME_KOUSTUBH }}
-          MYKI_CARDNUMBER_KOUSTUBH: ${{ secrets.MYKI_CARDNUMBER_KOUSTUBH }}
-          MYKI_PASSWORD_KOUSTUBH: ${{ secrets.MYKI_PASSWORD_KOUSTUBH }}
-          # Add more users here as needed:
-          # MYKI_USERNAME_JOHN: ${{ secrets.MYKI_USERNAME_JOHN }}
-          # MYKI_CARDNUMBER_JOHN: ${{ secrets.MYKI_CARDNUMBER_JOHN }}
-          # MYKI_PASSWORD_JOHN: ${{ secrets.MYKI_PASSWORD_JOHN }}
+          # GitHub Actions automatically passes all repository secrets as environment variables
+          # The workflow will dynamically read config/myki_tracker_config.json to find user keys,
+          # then look for the corresponding secrets:
+          #   For user "koustubh" -> MYKI_USERNAME_KOUSTUBH, MYKI_CARDNUMBER_KOUSTUBH, MYKI_PASSWORD_KOUSTUBH
+          #   For user "john" -> MYKI_USERNAME_JOHN, MYKI_CARDNUMBER_JOHN, MYKI_PASSWORD_JOHN
+          #
+          # Add your secrets in GitHub repo settings: Settings > Secrets and variables > Actions
+          # The workflow will fail with a clear error if any required secrets are missing.
+          SECRETS_CONTEXT: ${{ toJson(secrets) }}
         run: |
           echo "Creating required directories..."
           mkdir -p browser_profile output auth_data screenshots
@@ -77,53 +77,72 @@ jobs:
             exit 1
           fi
 
-          echo "Creating .env file from environment variables..."
-          # Extract user keys from config (excluding metadata and comments)
-          USER_KEYS=$(python3 -c "
+          echo "Creating .env file from GitHub secrets..."
+          # Parse secrets from JSON context and create .env file dynamically
+          python3 << 'PYSCRIPT'
           import json
+          import os
+          import sys
+
+          # Load config to get user keys
           with open('config/myki_tracker_config.json') as f:
               config = json.load(f)
-          users = [k for k in config.keys() if not k.startswith('_') and k != 'metadata']
-          print(' '.join(users))
-          ")
 
-          echo "Found users in config: $USER_KEYS"
+          # Get user keys (excluding metadata and comments)
+          user_keys = [k for k in config.keys() if not k.startswith('_') and k != 'metadata']
+          print(f"Found users in config: {', '.join(user_keys)}")
 
-          # Create .env file header
-          cat > .env << 'ENVEOF'
-          # Myki Multi-User Credentials
-          # Auto-generated from GitHub Secrets
-          ENVEOF
+          # Load secrets from environment
+          secrets_json = os.environ.get('SECRETS_CONTEXT', '{}')
+          secrets = json.loads(secrets_json)
 
-          # For each user, get their credentials from environment and add to .env
-          for user_key in $USER_KEYS; do
-            user_key_upper=$(echo "$user_key" | tr '[:lower:]' '[:upper:]' | tr '-.' '_')
+          # Create .env file
+          with open('.env', 'w') as env_file:
+              env_file.write("# Myki Multi-User Credentials\n")
+              env_file.write("# Auto-generated from GitHub Secrets\n")
 
-            # Get values from environment variables
-            username_var="MYKI_USERNAME_${user_key_upper}"
-            cardnumber_var="MYKI_CARDNUMBER_${user_key_upper}"
-            password_var="MYKI_PASSWORD_${user_key_upper}"
+              missing_secrets = []
 
-            username_val="${!username_var}"
-            cardnumber_val="${!cardnumber_var}"
-            password_val="${!password_var}"
+              for user_key in user_keys:
+                  # Convert to uppercase and replace special chars
+                  user_key_upper = user_key.upper().replace('-', '_').replace('.', '_')
 
-            # Check if all three are set
-            if [ -z "$username_val" ] || [ -z "$cardnumber_val" ] || [ -z "$password_val" ]; then
-              echo "ERROR: Missing credentials for user '$user_key'"
-              echo "  Required secrets: $username_var, $cardnumber_var, $password_var"
-              exit 1
-            fi
+                  # Get secret names
+                  username_key = f"MYKI_USERNAME_{user_key_upper}"
+                  cardnumber_key = f"MYKI_CARDNUMBER_{user_key_upper}"
+                  password_key = f"MYKI_PASSWORD_{user_key_upper}"
 
-            # Add to .env file
-            echo "" >> .env
-            echo "# User: $user_key" >> .env
-            echo "MYKI_USERNAME_${user_key_upper}=${username_val}" >> .env
-            echo "MYKI_CARDNUMBER_${user_key_upper}=${cardnumber_val}" >> .env
-            echo "MYKI_PASSWORD_${user_key_upper}=${password_val}" >> .env
-          done
+                  # Get secret values
+                  username = secrets.get(username_key)
+                  cardnumber = secrets.get(cardnumber_key)
+                  password = secrets.get(password_key)
 
-          echo "✓ .env file created with credentials for all users"
+                  # Check if all three exist
+                  if not username or not cardnumber or not password:
+                      if not username:
+                          missing_secrets.append(username_key)
+                      if not cardnumber:
+                          missing_secrets.append(cardnumber_key)
+                      if not password:
+                          missing_secrets.append(password_key)
+                      continue
+
+                  # Write to .env file
+                  env_file.write(f"\n# User: {user_key}\n")
+                  env_file.write(f"{username_key}={username}\n")
+                  env_file.write(f"{cardnumber_key}={cardnumber}\n")
+                  env_file.write(f"{password_key}={password}\n")
+
+              if missing_secrets:
+                  print(f"\n❌ ERROR: Missing required GitHub secrets:")
+                  for secret in missing_secrets:
+                      print(f"  - {secret}")
+                  print(f"\nAdd these secrets in: Settings > Secrets and variables > Actions")
+                  sys.exit(1)
+
+          print("✓ .env file created with credentials for all users")
+          PYSCRIPT
+
           echo "Configuration ready"
 
       - name: Prepare Chrome profile (if available)
