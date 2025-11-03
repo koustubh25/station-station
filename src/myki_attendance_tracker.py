@@ -16,7 +16,7 @@ import requests
 
 from myki_api_client import MykiAPIClient
 from config_manager import (
-    load_user_config,
+    load_unified_config,
     validate_user_config,
     load_user_credentials,
     get_effective_end_date,
@@ -197,7 +197,7 @@ def main() -> int:
         print("Loading Configuration")
         print("-" * 80)
 
-        user_config = load_user_config(config_path)
+        user_config = load_unified_config(config_path)
         validate_user_config(user_config)
 
         # Step 2.5: Load user credentials from environment variables
