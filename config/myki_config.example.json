@@ -1,54 +1,60 @@
 {
-  "_comment": "Unified Myki Configuration - Multi-user support with separate Myki accounts",
+  "_comment": "Unified Myki Configuration - Multi-user support with secure credential management",
   "_instructions": {
     "1_copy": "Copy this file to config/myki_config.json",
-    "2_configure_users": "Each key (e.g. 'koustubh') is both the config name AND the Myki username",
-    "3_set_passwords": "For each user, set environment variable: export MYKI_PASSWORD_{USERNAME}='password'",
-    "4_example": "For user 'koustubh', set: export MYKI_PASSWORD_KOUSTUBH='password_here'",
-    "5_run": "python src/run_myki_workflow.py"
+    "2_create_env": "Copy .env.example to .env and add credentials there (NOT in this config file)",
+    "3_credentials": "For each user key in this config, add 3 secrets to .env:",
+    "4_example": "For config key 'koustubh' add: MYKI_USERNAME_KOUSTUBH, MYKI_CARDNUMBER_KOUSTUBH, MYKI_PASSWORD_KOUSTUBH",
+    "5_security": "NEVER commit .env file - credentials must stay out of version control",
+    "6_run": "python src/run_myki_workflow.py"
   },
 
   "users": {
     "koustubh": {
-      "mykiCardNumber": "123456789012345",
       "targetStation": "Heathmont Station",
       "skipDates": ["2025-03-15", "2025-06-20"],
+      "manualAttendanceDates": ["2025-05-10", "2025-05-15"],
       "startDate": "2025-04-15",
       "endDate": "2025-06-15",
 
       "_field_notes": {
-        "mykiCardNumber": "String, 16-digit Myki card number (REQUIRED)",
         "targetStation": "String, exact station name, case-sensitive (REQUIRED)",
-        "skipDates": "Array of YYYY-MM-DD dates to exclude (OPTIONAL - defaults to [])",
+        "skipDates": "Array of YYYY-MM-DD dates to exclude from tracking (OPTIONAL)",
+        "manualAttendanceDates": "Array of YYYY-MM-DD dates when you drove to work instead of using PTV (OPTIONAL)",
         "startDate": "String, YYYY-MM-DD format, inclusive start (REQUIRED)",
         "endDate": "String, YYYY-MM-DD format, inclusive end (OPTIONAL - defaults to today)"
       },
-      "_username_note": "The key 'koustubh' IS the Myki username used for login",
-      "_password_note": "Set environment variable: export MYKI_PASSWORD_KOUSTUBH='password_here'"
+      "_credentials_note": "Add to .env: MYKI_USERNAME_KOUSTUBH, MYKI_CARDNUMBER_KOUSTUBH, MYKI_PASSWORD_KOUSTUBH"
     },
 
     "john": {
-      "mykiCardNumber": "123456789012345",
       "targetStation": "Melbourne Central",
       "startDate": "2025-01-01",
       "endDate": "2025-12-31",
-      "_username_note": "The key 'john' IS the Myki username used for login",
-      "_password_note": "Set environment variable: export MYKI_PASSWORD_JOHN='password_here'",
+      "manualAttendanceDates": ["2025-02-14"],
+      "_credentials_note": "Add to .env: MYKI_USERNAME_JOHN, MYKI_CARDNUMBER_JOHN, MYKI_PASSWORD_JOHN",
       "_note": "Each user is a separate Myki account - they can track different cards/stations"
     }
   },
 
   "_multi_user_explanation": {
     "scenario": "Multiple people, each with their own Myki account",
-    "example": "User 'koustubh' logs in with username 'koustubh', User 'john' logs in with username 'john'",
+    "config_key": "The key (e.g. 'koustubh', 'john') is just a config identifier - actual username goes in .env",
+    "credentials": "All sensitive data (username, card number, password) stored securely in .env file",
     "authentication": "Phase 1 authenticates EACH user separately and saves individual sessions",
     "tracking": "Phase 2 uses each user's session to fetch their transaction data",
-    "benefit": "One tool can track attendance for multiple people automatically",
-    "simplicity": "Config key = Myki username (no separate mykiUsername field needed)"
+    "benefit": "One tool can track attendance for multiple people automatically"
+  },
+
+  "_manual_attendance_explanation": {
+    "purpose": "Track days when you drove to work instead of using public transport",
+    "display": "Manual dates shown in orange/amber in calendar, PTV attendance in red",
+    "statistics": "Both manual and PTV attendance counted in total days attended",
+    "format": "Array of YYYY-MM-DD date strings, e.g. ['2025-05-10', '2025-05-15']"
   },
 
   "_working_days_info": {
     "definition": "Monday-Friday, excluding Melbourne VIC public holidays and user skip dates",
-    "attendance_rule": "Day marked attended if ≥1 'Touch off' at targetStation on working day"
+    "attendance_rule": "Day marked attended if ≥1 'Touch off' at targetStation on working day OR listed in manualAttendanceDates"
   }
 }
