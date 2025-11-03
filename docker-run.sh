@@ -106,7 +106,7 @@ for VAR in $(compgen -e | grep "^MYKI_"); do
     else
         log "Passing environment variable: $VAR=${!VAR}"
     fi
-    ((MYKI_VAR_COUNT++))
+    MYKI_VAR_COUNT=$((MYKI_VAR_COUNT + 1))
 done
 
 # Verify at least one Myki variable is set
