@@ -95,17 +95,24 @@ ENV_FLAGS+=("-e" "DISPLAY=:99")
 # Set Chrome profile directory
 ENV_FLAGS+=("-e" "CHROME_PROFILE_DIR=/app/browser_profile")
 
-# Pass user passwords from environment (pattern: MYKI_PASSWORD_*)
+# Pass all Myki credentials from environment (pattern: MYKI_*)
 # These should be loaded from .env file
-for VAR in $(compgen -e | grep "^MYKI_PASSWORD_"); do
+MYKI_VAR_COUNT=0
+for VAR in $(compgen -e | grep "^MYKI_"); do
     ENV_FLAGS+=("-e" "$VAR=${!VAR}")
-    log "Passing environment variable: $VAR=***"
+    # Mask passwords in logs
+    if [[ "$VAR" == *"PASSWORD"* ]]; then
+        log "Passing environment variable: $VAR=***"
+    else
+        log "Passing environment variable: $VAR=${!VAR}"
+    fi
+    ((MYKI_VAR_COUNT++))
 done
 
-# Verify at least one password is set
-if [ ${#ENV_FLAGS[@]} -le 2 ]; then
-    log_error "No MYKI_PASSWORD_* environment variables found"
-    log_error "Please set passwords in .env file (e.g., MYKI_PASSWORD_KOUSTUBH25=your_password)"
+# Verify at least one Myki variable is set
+if [ $MYKI_VAR_COUNT -eq 0 ]; then
+    log_error "No MYKI_* environment variables found"
+    log_error "Please set credentials in .env file (MYKI_USERNAME_*, MYKI_CARDNUMBER_*, MYKI_PASSWORD_*)"
     log_error "See .env.example for reference"
     exit 1
 fi
