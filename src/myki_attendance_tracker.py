@@ -80,12 +80,14 @@ def process_user(
         start_date_str = user_config["startDate"]
         end_date_str = get_effective_end_date({username: user_config}, username)
         skip_dates_str = get_effective_skip_dates({username: user_config}, username)
+        manual_attendance_dates = user_config.get("manualAttendanceDates", [])
 
         print(f"Configuration:")
         print(f"  Card Number: {card_number}")
         print(f"  Target Station: {target_station}")
         print(f"  Date Range: {start_date_str} to {end_date_str}")
         print(f"  Skip Dates: {len(skip_dates_str)} day(s)")
+        print(f"  Manual Attendance Dates: {len(manual_attendance_dates)} day(s)")
 
         # Parse dates
         start_date = datetime.strptime(start_date_str, '%Y-%m-%d').date()
@@ -140,7 +142,8 @@ def process_user(
             start_date=start_date,
             end_date=end_date,
             skip_dates=skip_dates,
-            vic_holidays=vic_holidays
+            vic_holidays=vic_holidays,
+            manual_attendance_dates=manual_attendance_dates
         )
 
         print(f"\n✓ Successfully processed user: {username}")
