@@ -47,7 +47,7 @@ function App() {
   }, [users, selectedUser]);
 
   // Get filtered data for selected user and date range
-  const { filteredMonthlyData, summaryStats, attendedDates, skipDates } = useFilteredData(
+  const { filteredMonthlyData, summaryStats, attendedDates, manualAttendanceDates, skipDates } = useFilteredData(
     data,
     selectedUser,
     startDate,
@@ -87,24 +87,41 @@ function App() {
 
   /**
    * Handle attended day click - show details modal
+   * Supports both PTV attendance and manual attendance
    */
   const handleDayClick = (dateString) => {
     if (!data || !selectedUser) return;
 
     const userData = data[selectedUser];
-    if (!userData || !userData.attendanceDays) return;
+    if (!userData) return;
 
-    // Find attendance record for this date
-    const attendanceRecord = userData.attendanceDays.find(
-      (record) => record.date === dateString
-    );
+    // Check if this is manual attendance
+    const isManual = userData.manualAttendanceDates && userData.manualAttendanceDates.includes(dateString);
 
-    if (attendanceRecord) {
+    if (isManual) {
+      // Manual attendance - no timestamp
       setSelectedAttendanceDay({
         date: dateString,
-        timestamp: attendanceRecord.timestamp,
-        station: attendanceRecord.targetStation || userData.targetStation || 'Unknown'
+        timestamp: null,
+        station: userData.targetStation || 'Unknown',
+        isManual: true
       });
+    } else {
+      // PTV attendance - find the attendance record
+      if (!userData.attendanceDays) return;
+
+      const attendanceRecord = userData.attendanceDays.find(
+        (record) => record.date === dateString
+      );
+
+      if (attendanceRecord) {
+        setSelectedAttendanceDay({
+          date: dateString,
+          timestamp: attendanceRecord.timestamp,
+          station: attendanceRecord.targetStation || userData.targetStation || 'Unknown',
+          isManual: false
+        });
+      }
     }
   };
 
@@ -214,6 +231,7 @@ function App() {
           <div className="bg-white rounded-lg shadow-md p-4 sm:p-6 border border-gray-200">
             <CalendarView
               attendedDates={attendedDates}
+              manualAttendanceDates={manualAttendanceDates}
               skipDates={skipDates}
               selectedMonth={selectedMonth}
               onMonthChange={handleMonthChange}
@@ -245,6 +263,7 @@ function App() {
           date={selectedAttendanceDay.date}
           timestamp={selectedAttendanceDay.timestamp}
           station={selectedAttendanceDay.station}
+          isManual={selectedAttendanceDay.isManual}
           onClose={handleCloseModal}
         />
       )}

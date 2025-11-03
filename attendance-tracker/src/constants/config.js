@@ -22,3 +22,16 @@ export const DEFAULT_END_DATE = new Date();
  * Color used for marking attended days (red theme)
  */
 export const ATTENDED_DAY_COLOR = '#ef4444';
+
+/**
+ * Color used for marking manual attendance days (amber/orange theme)
+ */
+export const MANUAL_ATTENDANCE_COLOR = '#f59e0b';
+
+/**
+ * Attendance color map for different attendance types
+ */
+export const ATTENDANCE_COLORS = {
+  ptv: '#ef4444',      // Red for PTV-detected attendance
+  manual: '#f59e0b',   // Amber/orange for manual attendance
+};

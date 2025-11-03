@@ -16,24 +16,39 @@ def calculate_statistics(
     start_date: date,
     end_date: date,
     skip_dates: List[date],
-    vic_holidays
+    vic_holidays,
+    manual_attendance_dates: List[str] = None
 ) -> Dict:
     """Calculate attendance statistics for a user.
 
     Args:
-        attendance_days: List of ISO date strings when user attended
+        attendance_days: List of ISO date strings when user attended (PTV-detected)
         start_date: Period start date
         end_date: Period end date
         skip_dates: Dates to exclude from working days
         vic_holidays: Melbourne VIC holidays object
+        manual_attendance_dates: List of ISO date strings for manually recorded attendance (optional)
 
     Returns:
         Dictionary containing overall and monthly statistics
+
+    Note:
+        Manual attendance dates are included in total attendance calculations.
     """
     # Convert attendance days to date objects for easier processing
     attendance_date_objects = [
         datetime.strptime(day, '%Y-%m-%d').date() for day in attendance_days
     ]
+
+    # Convert manual attendance dates to date objects
+    manual_date_objects = []
+    if manual_attendance_dates:
+        manual_date_objects = [
+            datetime.strptime(day, '%Y-%m-%d').date() for day in manual_attendance_dates
+        ]
+
+    # Combine PTV and manual attendance dates for total calculation
+    all_attendance_dates = attendance_date_objects + manual_date_objects
 
     # Calculate total working days and build monthly working days map
     total_working_days = 0
@@ -50,8 +65,8 @@ def calculate_statistics(
 
         current_date += timedelta(days=1)
 
-    # Calculate attendance stats
-    days_attended = len(attendance_days)
+    # Calculate attendance stats (include manual attendance in total)
+    days_attended = len(all_attendance_dates)
     days_missed = max(0, total_working_days - days_attended)
 
     # Calculate overall percentage (avoid division by zero)
@@ -64,9 +79,9 @@ def calculate_statistics(
     first_attendance = attendance_days[0] if attendance_days else None
     last_attendance = attendance_days[-1] if attendance_days else None
 
-    # Calculate monthly statistics
+    # Calculate monthly statistics (include both PTV and manual attendance)
     monthly_attendance = {}  # {month_key: [attendance_dates]}
-    for att_date in attendance_date_objects:
+    for att_date in all_attendance_dates:
         month_key = att_date.strftime('%Y-%m')
         if month_key not in monthly_attendance:
             monthly_attendance[month_key] = []
@@ -280,7 +295,8 @@ def update_user_output(
     start_date: Optional[date] = None,
     end_date: Optional[date] = None,
     skip_dates: Optional[List[date]] = None,
-    vic_holidays = None
+    vic_holidays = None,
+    manual_attendance_dates: Optional[List[str]] = None
 ) -> Dict:
     """Update user output with new attendance data and calculate statistics.
 
@@ -327,6 +343,7 @@ def update_user_output(
     else:
         user_data = {
             "attendanceDays": [],
+            "manualAttendanceDates": [],
             "latestProcessedDate": None,
             "targetStation": target_station,
             "lastUpdated": None
@@ -399,14 +416,25 @@ def update_user_output(
         user_data["skipDates"] = skip_dates_iso
         print(f"    Added {len(skip_dates_iso)} skip dates to output")
 
+    # Step 5.5: Add manual attendance dates to output (sorted chronologically)
+    if manual_attendance_dates is not None and len(manual_attendance_dates) > 0:
+        manual_dates_sorted = sorted(manual_attendance_dates)
+        user_data["manualAttendanceDates"] = manual_dates_sorted
+        print(f"    Added {len(manual_dates_sorted)} manual attendance dates to output")
+    else:
+        user_data["manualAttendanceDates"] = []
+
     # Step 6: Calculate statistics (if date range provided)
     if start_date is not None and end_date is not None and skip_dates is not None and vic_holidays is not None:
+        # Use manual_attendance_dates if provided, otherwise empty list
+        manual_dates = manual_attendance_dates if manual_attendance_dates is not None else []
         statistics = calculate_statistics(
             attendance_days=unique_days,
             start_date=start_date,
             end_date=end_date,
             skip_dates=skip_dates,
-            vic_holidays=vic_holidays
+            vic_holidays=vic_holidays,
+            manual_attendance_dates=manual_dates
         )
         user_data["statistics"] = statistics
         print(f"  Statistics:")

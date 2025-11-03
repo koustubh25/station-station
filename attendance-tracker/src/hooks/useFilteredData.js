@@ -3,13 +3,13 @@ import { filterDataByDateRange, calculateSummaryStats, transformMonthlyData } fr
 
 /**
  * Custom hook for filtering attendance data by date range and user
- * Returns filtered monthly data, summary statistics, attended dates, and skip dates
+ * Returns filtered monthly data, summary statistics, attended dates, manual attendance dates, and skip dates
  *
  * @param {Object} attendanceData - Full attendance data object
  * @param {string} selectedUser - Currently selected username
  * @param {Date} startDate - Start date for filtering
  * @param {Date} endDate - End date for filtering
- * @returns {Object} { filteredMonthlyData, summaryStats, attendedDates, skipDates }
+ * @returns {Object} { filteredMonthlyData, summaryStats, attendedDates, manualAttendanceDates, skipDates }
  */
 export function useFilteredData(attendanceData, selectedUser, startDate, endDate) {
   /**
@@ -30,6 +30,16 @@ export function useFilteredData(attendanceData, selectedUser, startDate, endDate
       return [];
     }
     return userData.skipDates;
+  }, [userData]);
+
+  /**
+   * Get manual attendance dates from user data
+   */
+  const manualAttendanceDates = useMemo(() => {
+    if (!userData || !userData.manualAttendanceDates) {
+      return [];
+    }
+    return userData.manualAttendanceDates;
   }, [userData]);
 
   /**
@@ -68,6 +78,7 @@ export function useFilteredData(attendanceData, selectedUser, startDate, endDate
     filteredMonthlyData,
     summaryStats,
     attendedDates,
+    manualAttendanceDates,
     skipDates
   };
 }

@@ -18,7 +18,7 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 from myki_auth import main as auth_main
 from myki_attendance_tracker import main as tracker_main
-from config_manager import load_unified_config, validate_user_config, load_user_passwords
+from config_manager import load_unified_config, validate_user_config, load_user_credentials
 from dotenv import load_dotenv
 
 
@@ -65,10 +65,10 @@ def validate_unified_config_requirements(config_path):
     except Exception as e:
         return False, f"Config error: {str(e)}"
 
-    # Validate user passwords exist in environment
+    # Validate user credentials exist in environment
     try:
-        user_passwords = load_user_passwords(user_config)
-        print(f"✓ Passwords loaded for {len(user_passwords)} user(s)")
+        user_credentials = load_user_credentials(user_config)
+        print(f"✓ Credentials loaded for {len(user_credentials)} user(s)")
     except ValueError as e:
         return False, str(e)
 
@@ -138,7 +138,7 @@ def main():
     # Load unified config (validation already done in pre-flight)
     load_dotenv()
     user_config = load_unified_config(config_path)
-    user_passwords = load_user_passwords(user_config)
+    user_credentials = load_user_credentials(user_config)
 
     # Phase 1: Authentication (Multi-User)
     print_header("PHASE 1: MULTI-USER AUTHENTICATION")
@@ -154,18 +154,22 @@ def main():
     usernames = [k for k in user_config.keys() if not k.startswith("_")]
 
     # Authenticate each user sequentially
-    for username in usernames:
-        myki_password = user_passwords[username]
+    for config_key in usernames:
+        # Get credentials for this user
+        creds = user_credentials[config_key]
+        myki_username = creds["username"]
+        myki_password = creds["password"]
+        display_name = creds["display_username"]
 
         print(f"\n{'─' * 80}")
-        print(f"Authenticating: {username}")
+        print(f"Authenticating: {display_name}")
         print(f"{'─' * 80}")
 
         # Set environment variables for this user
-        # The config key (e.g., "koustubh") IS the Myki username
-        os.environ['MYKI_USERNAME'] = username
+        # Use actual Myki username from credentials (may differ from config key)
+        os.environ['MYKI_USERNAME'] = myki_username
         os.environ['MYKI_PASSWORD'] = myki_password
-        os.environ['MYKI_AUTH_USERNAME_KEY'] = username  # For session file naming
+        os.environ['MYKI_AUTH_USERNAME_KEY'] = config_key  # For session file naming
 
         # Clear args for auth_main (it doesn't take CLI args)
         sys.argv = [sys.argv[0]]
@@ -173,14 +177,14 @@ def main():
         try:
             auth_exit_code = auth_main()
             if auth_exit_code == 0:
-                auth_successes.append(username)
-                print(f"  ✓ {username} authenticated successfully")
+                auth_successes.append(display_name)
+                print(f"  ✓ {display_name} authenticated successfully")
             else:
-                auth_failures.append(username)
-                print(f"  ✗ {username} authentication failed (exit code {auth_exit_code})")
+                auth_failures.append(display_name)
+                print(f"  ✗ {display_name} authentication failed (exit code {auth_exit_code})")
         except Exception as e:
-            auth_failures.append(username)
-            print(f"  ✗ {username} authentication error: {e}")
+            auth_failures.append(display_name)
+            print(f"  ✗ {display_name} authentication error: {e}")
             import traceback
             traceback.print_exc()
 

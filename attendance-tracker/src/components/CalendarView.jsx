@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { ATTENDED_DAY_COLOR } from '../constants/config';
+import { ATTENDED_DAY_COLOR, ATTENDANCE_COLORS } from '../constants/config';
 import { usePublicHolidays } from '../hooks/usePublicHolidays';
 
 /**
- * CalendarView component - Monthly calendar with attended days marked in red
+ * CalendarView component - Monthly calendar with attended days marked in red and manual attendance in amber
  *
  * @component
  * @param {Object} props - Component props
- * @param {string[]} props.attendedDates - Array of attended dates in YYYY-MM-DD format
+ * @param {string[]} props.attendedDates - Array of PTV-detected attended dates in YYYY-MM-DD format
+ * @param {string[]} props.manualAttendanceDates - Array of manually recorded attended dates in YYYY-MM-DD format
  * @param {string[]} props.skipDates - Array of skip dates in YYYY-MM-DD format
  * @param {Date} props.selectedMonth - Currently selected month to display
  * @param {Function} props.onMonthChange - Callback when month navigation occurs
@@ -17,7 +18,7 @@ import { usePublicHolidays } from '../hooks/usePublicHolidays';
  * @param {Object} props.dateRange - Date range filter { start: Date, end: Date }
  * @returns {JSX.Element} Calendar component
  */
-function CalendarView({ attendedDates = [], skipDates = [], selectedMonth, onMonthChange, onDayClick, dateRange }) {
+function CalendarView({ attendedDates = [], manualAttendanceDates = [], skipDates = [], selectedMonth, onMonthChange, onDayClick, dateRange }) {
   const [activeStartDate, setActiveStartDate] = useState(selectedMonth || new Date());
 
   // Get public holidays for Victoria, Australia
@@ -32,7 +33,8 @@ function CalendarView({ attendedDates = [], skipDates = [], selectedMonth, onMon
 
   /**
    * Determine the CSS class for calendar tiles
-   * Marks attended days with red background, skip dates with amber text, and public holidays with red text
+   * Marks PTV attendance with red background, manual attendance with amber background,
+   * skip dates with amber text, and public holidays with red text
    */
   const tileClassName = ({ date, view }) => {
     // Only apply classes to month view (not year/decade view)
@@ -43,11 +45,14 @@ function CalendarView({ attendedDates = [], skipDates = [], selectedMonth, onMon
     // Use local date format to avoid timezone conversion issues
     const dateString = date.toLocaleDateString('en-CA'); // YYYY-MM-DD format
     const isAttended = attendedDates.includes(dateString);
+    const isManualAttendance = manualAttendanceDates.includes(dateString);
     const isSkipDate = skipDates.includes(dateString);
     const isPublicHoliday = publicHolidays.has(dateString);
 
     if (isAttended) {
       return 'attended-day';
+    } else if (isManualAttendance) {
+      return 'manual-attendance-day';
     } else if (isSkipDate) {
       return 'skip-date';
     } else if (isPublicHoliday) {
@@ -59,14 +64,15 @@ function CalendarView({ attendedDates = [], skipDates = [], selectedMonth, onMon
 
   /**
    * Handle date click events
-   * Only trigger callback for attended days
+   * Trigger callback for both PTV-detected and manual attendance days
    */
   const handleClickDay = (value) => {
     // Use local date format to avoid timezone conversion issues
     const dateString = value.toLocaleDateString('en-CA'); // YYYY-MM-DD format
     const isAttended = attendedDates.includes(dateString);
+    const isManualAttendance = manualAttendanceDates.includes(dateString);
 
-    if (isAttended && onDayClick) {
+    if ((isAttended || isManualAttendance) && onDayClick) {
       onDayClick(dateString);
     }
   };
@@ -100,13 +106,24 @@ function CalendarView({ attendedDates = [], skipDates = [], selectedMonth, onMon
       </div>
       <style>{`
         .attended-day {
-          background-color: ${ATTENDED_DAY_COLOR} !important;
+          background-color: ${ATTENDANCE_COLORS.ptv} !important;
           color: white !important;
           border-radius: 50%;
         }
 
         .attended-day:hover {
           background-color: #dc2626 !important;
+          cursor: pointer;
+        }
+
+        .manual-attendance-day {
+          background-color: ${ATTENDANCE_COLORS.manual} !important;
+          color: white !important;
+          border-radius: 50%;
+        }
+
+        .manual-attendance-day:hover {
+          background-color: #d97706 !important;
           cursor: pointer;
         }
 

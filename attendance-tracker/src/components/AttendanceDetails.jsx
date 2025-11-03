@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { ATTENDANCE_COLORS } from '../constants/config';
 
 /**
  * AttendanceDetails component - Modal displaying detailed attendance information for a specific day
@@ -6,12 +7,13 @@ import { useEffect, useRef } from 'react';
  * @component
  * @param {Object} props - Component props
  * @param {string} props.date - Date in YYYY-MM-DD format
- * @param {string} props.timestamp - Time of attendance (e.g., "08:30 AM")
+ * @param {string} props.timestamp - Time of attendance (e.g., "08:30 AM") or null for manual attendance
  * @param {string} props.station - Station name
+ * @param {boolean} props.isManual - Whether this is manual attendance (default: false)
  * @param {Function} props.onClose - Callback to close the modal
  * @returns {JSX.Element} Modal component
  */
-function AttendanceDetails({ date, timestamp, station, onClose }) {
+function AttendanceDetails({ date, timestamp, station, isManual = false, onClose }) {
   const modalRef = useRef(null);
   const closeButtonRef = useRef(null);
 
@@ -122,17 +124,33 @@ function AttendanceDetails({ date, timestamp, station, onClose }) {
           </h3>
 
           <div className="space-y-4">
+            {/* Attendance Type */}
+            <div className="border-b border-gray-200 pb-3">
+              <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Type</p>
+              <div className="mt-1 flex items-center gap-2">
+                <span
+                  className="inline-block w-3 h-3 rounded-full"
+                  style={{ backgroundColor: isManual ? ATTENDANCE_COLORS.manual : ATTENDANCE_COLORS.ptv }}
+                ></span>
+                <p className="text-lg font-semibold text-gray-900">
+                  {isManual ? 'Manual Attendance' : 'PTV Attendance'}
+                </p>
+              </div>
+            </div>
+
             {/* Date */}
             <div className="border-b border-gray-200 pb-3">
               <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Date</p>
               <p className="mt-1 text-lg font-semibold text-gray-900">{formatDate(date)}</p>
             </div>
 
-            {/* Timestamp */}
-            <div className="border-b border-gray-200 pb-3">
-              <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Time</p>
-              <p className="mt-1 text-lg font-semibold text-gray-900">{timestamp}</p>
-            </div>
+            {/* Timestamp - only show for PTV attendance */}
+            {!isManual && timestamp && (
+              <div className="border-b border-gray-200 pb-3">
+                <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">Time</p>
+                <p className="mt-1 text-lg font-semibold text-gray-900">{timestamp}</p>
+              </div>
+            )}
 
             {/* Station */}
             <div className="pb-3">
@@ -145,7 +163,11 @@ function AttendanceDetails({ date, timestamp, station, onClose }) {
           <div className="mt-6">
             <button
               onClick={onClose}
-              className="w-full bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors min-h-[44px]"
+              className={`w-full text-white font-medium py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors min-h-[44px] ${
+                isManual
+                  ? 'bg-amber-500 hover:bg-amber-600 focus:ring-amber-500'
+                  : 'bg-red-500 hover:bg-red-600 focus:ring-red-500'
+              }`}
             >
               Close
             </button>

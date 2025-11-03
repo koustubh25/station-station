@@ -18,6 +18,7 @@ from myki_api_client import MykiAPIClient
 from config_manager import (
     load_user_config,
     validate_user_config,
+    load_user_credentials,
     get_effective_end_date,
     get_effective_skip_dates
 )
@@ -36,6 +37,7 @@ from output_manager import (
 def process_user(
     username: str,
     user_config: Dict,
+    user_credentials: Dict,
     client: MykiAPIClient,
     existing_output: Dict,
     vic_holidays
@@ -43,7 +45,7 @@ def process_user(
     """Process a single user's attendance tracking.
 
     Orchestrates all steps for one user:
-    1. Parse user config (card number, station, dates, skip dates)
+    1. Parse user config (station, dates, skip dates) and credentials (card number)
     2. Fetch all transactions (handle pagination)
     3. Filter new transactions (incremental processing)
     4. Filter by station, type, and date range
@@ -53,6 +55,7 @@ def process_user(
     Args:
         username: Username (key in config)
         user_config: User configuration dictionary
+        user_credentials: User credentials dictionary with card_number, username, password
         client: MykiAPIClient instance (reused across users)
         existing_output: Existing output data for incremental processing
         vic_holidays: Melbourne VIC holidays object
@@ -71,8 +74,8 @@ def process_user(
         print(f"Processing user: {username}")
         print(f"{'=' * 60}")
 
-        # Step 1: Parse user config
-        card_number = user_config["mykiCardNumber"]
+        # Step 1: Parse user config and credentials
+        card_number = user_credentials["card_number"]
         target_station = user_config["targetStation"]
         start_date_str = user_config["startDate"]
         end_date_str = get_effective_end_date({username: user_config}, username)
@@ -194,6 +197,13 @@ def main() -> int:
         user_config = load_user_config(config_path)
         validate_user_config(user_config)
 
+        # Step 2.5: Load user credentials from environment variables
+        print("\n" + "-" * 80)
+        print("Loading Credentials")
+        print("-" * 80)
+
+        user_credentials = load_user_credentials(user_config)
+
         # Step 3: Initialize MykiAPIClient once (reuse for all users)
         print("\n" + "-" * 80)
         print("Initializing Myki API Client")
@@ -226,6 +236,7 @@ def main() -> int:
 
         for username in usernames:
             user_cfg = user_config[username]
+            user_creds = user_credentials[username]
 
             # Set environment variable for session file lookup (multi-user support)
             os.environ['MYKI_AUTH_USERNAME_KEY'] = username
@@ -235,6 +246,7 @@ def main() -> int:
             success, user_output, error = process_user(
                 username=username,
                 user_config=user_cfg,
+                user_credentials=user_creds,
                 client=client,
                 existing_output=existing_output,
                 vic_holidays=vic_holidays
