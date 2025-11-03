@@ -111,10 +111,13 @@ if [ "$USING_TEMP_DIRS" = true ]; then
 fi
 
 # Environment variable information
+# Force Python unbuffered output for real-time logs
+export PYTHONUNBUFFERED=1
+
 log "Environment Configuration:"
 log "  DISPLAY: ${DISPLAY:-<not set>}"
 log "  CHROME_PROFILE_DIR: ${CHROME_PROFILE_DIR:-/app/browser_profile (default)}"
-log "  PYTHONUNBUFFERED: ${PYTHONUNBUFFERED:-<not set>}"
+log "  PYTHONUNBUFFERED: ${PYTHONUNBUFFERED}"
 
 # Step 1: Start Xvfb virtual display
 log "Starting Xvfb on display :99 (resolution: 1920x1080x24)"
