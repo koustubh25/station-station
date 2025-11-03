@@ -460,6 +460,9 @@ def save_output(
     with generatedAt timestamp, config path, and user count. Writes JSON
     with proper formatting (indent=2) for human readability.
 
+    Filters output to only include users that exist in the config file,
+    removing any stale user data from previous runs.
+
     Args:
         output_data: Dictionary containing user output data
         output_path: Path to output JSON file (default: output/attendance.json)
@@ -490,6 +493,41 @@ def save_output(
     # Create output directory if it doesn't exist
     path.parent.mkdir(parents=True, exist_ok=True)
     print(f"\nSaving output to: {path.absolute()}")
+
+    # Load config to get list of valid users
+    try:
+        with open(config_path, 'r') as f:
+            config = json.load(f)
+
+        # Get user keys from config (handle both 'users' key and root-level users)
+        if 'users' in config:
+            valid_users = set([k for k in config['users'].keys() if not k.startswith('_')])
+        else:
+            valid_users = set([k for k in config.keys() if not k.startswith('_') and k != 'metadata'])
+
+        # Filter output_data to only include valid users
+        filtered_output = {}
+        removed_users = []
+
+        for username, user_data in output_data.items():
+            if username == "metadata":
+                continue  # Skip metadata, we'll add it fresh below
+
+            if username in valid_users:
+                filtered_output[username] = user_data
+            else:
+                removed_users.append(username)
+
+        # Log cleanup actions
+        if removed_users:
+            print(f"  Removed {len(removed_users)} user(s) no longer in config: {', '.join(removed_users)}")
+
+        output_data = filtered_output
+
+    except FileNotFoundError:
+        print(f"  Warning: Config file not found at {config_path}, skipping user cleanup")
+    except json.JSONDecodeError:
+        print(f"  Warning: Config file is not valid JSON, skipping user cleanup")
 
     # Count users (exclude metadata key if already present)
     user_count = len([k for k in output_data.keys() if k != "metadata"])
