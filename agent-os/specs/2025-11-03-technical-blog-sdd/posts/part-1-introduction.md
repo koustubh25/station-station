@@ -1,13 +1,12 @@
 ---
 title: 'Part 1: Spec-Driven Development - Building Predictable AI-Assisted Software'
-published: true
+published: false
 description: 'Learn how Spec-Driven Development provides structure and predictability to AI-assisted coding, avoiding the trial-and-error loop of traditional AI chat interactions.'
 tags: 'ai, productivity, claude, automation'
 series: Building with Spec-Driven Development
 date: '2025-11-04T10:00:00Z'
 cover_image: null
 canonical_url: null
-id: 2989868
 ---
 
 You know that feeling when you're chatting with an AI coding assistant, and it seems to understand exactly what you want? You paste the generated code into your project, run it, and... it doesn't quite work. So you try again with a more detailed prompt. The AI generates something different. You test again. Still not right. Before you know it, you're caught in a trial-and-error loop, spending more time debugging AI-generated code than you would have writing it yourself.
