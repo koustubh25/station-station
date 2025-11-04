@@ -4,6 +4,7 @@ published: true
 description: "From raw idea to deployed code: the complete agent-os workflow for Spec-Driven Development, using real examples from Station Station."
 tags: workflow, ai, claude, productivity
 series: "Building with Spec-Driven Development"
+date: '2025-11-04T12:00:00Z'
 cover_image: # Add your cover image URL here
 canonical_url:
 ---
