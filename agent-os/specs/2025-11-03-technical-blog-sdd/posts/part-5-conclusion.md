@@ -5,6 +5,7 @@ description: 'A practical decision framework for choosing when Spec-Driven Devel
 tags: 'productivity, ai, development, tutorial'
 series: Building with Spec-Driven Development
 id: 2989893
+date: '2025-11-04T05:46:51Z'
 ---
 
 We've covered a lot in this series. In Part 1, we introduced Spec-Driven Development. In Part 2, we explored the Station Station project—8 features solving a real hybrid work compliance problem. In Part 3, we walked through the agent-os workflow. In Part 4, we got honest about the challenges and limitations.
