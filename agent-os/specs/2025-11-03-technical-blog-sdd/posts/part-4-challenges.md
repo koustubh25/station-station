@@ -5,6 +5,7 @@ description: An honest look at Spec-Driven Development's real-world benefits and
 tags: 'debugging, ai, productivity, development'
 series: Building with Spec-Driven Development
 id: 2989892
+date: '2025-11-04T05:45:52Z'
 ---
 
 In Parts 1-3, we covered Spec-Driven Development, the Station Station project, and the agent-os workflow. We saw a structured process that delivered 8 features, fully deployed and working. But I've been painting a rosy picture. Let me be honest about the challenges.
