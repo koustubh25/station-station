@@ -5,6 +5,7 @@ description: 'From raw idea to deployed code: the complete agent-os workflow for
 tags: 'workflow, ai, claude, productivity'
 series: Building with Spec-Driven Development
 id: 2989895
+date: '2025-11-04T05:43:12Z'
 ---
 
 In Parts 1 and 2, I introduced Spec-Driven Development and showed you the finished Station Station project—8 features, live on GitHub Pages, solving my real hybrid work compliance problem. But how did we actually get there? What does the agent-os workflow look like in practice?
