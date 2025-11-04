@@ -4,7 +4,6 @@ published: false
 description: An honest look at Spec-Driven Development's real-world benefits and limitations through actual debugging challenges from Station Station.
 tags: 'debugging, ai, productivity, development'
 series: Building with Spec-Driven Development
-date: '2025-11-04T13:00:00Z'
 cover_image: null
 canonical_url: null
 ---

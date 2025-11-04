@@ -4,7 +4,6 @@ published: false
 description: A fully functional web app solving hybrid work compliance through automated Myki transit data tracking—built in 3 days using Spec-Driven Development.
 tags: 'casestudy, react, python, automation'
 series: Building with Spec-Driven Development
-date: '2025-11-04T11:00:00Z'
 cover_image: null
 canonical_url: null
 ---

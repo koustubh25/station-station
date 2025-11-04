@@ -4,7 +4,6 @@ published: false
 description: 'A practical decision framework for choosing when Spec-Driven Development is worth the investment, based on real experience building Station Station.'
 tags: 'productivity, ai, development, tutorial'
 series: Building with Spec-Driven Development
-date: '2025-11-04T14:00:00Z'
 cover_image: null
 canonical_url: null
 ---

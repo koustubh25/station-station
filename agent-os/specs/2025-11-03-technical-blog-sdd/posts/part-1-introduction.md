@@ -4,7 +4,6 @@ published: true
 description: 'Learn how Spec-Driven Development provides structure and predictability to AI-assisted coding, avoiding the trial-and-error loop of traditional AI chat interactions.'
 tags: 'ai, productivity, claude, automation'
 series: Building with Spec-Driven Development
-date: '2025-11-04T10:00:00Z'
 cover_image: null
 canonical_url: null
 ---
