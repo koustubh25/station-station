@@ -7,7 +7,6 @@ series: Building with Spec-Driven Development
 date: '2025-11-04T10:00:00Z'
 cover_image: null
 canonical_url: null
-id: 2989856
 ---
 
 You know that feeling when you're chatting with an AI coding assistant, and it seems to understand exactly what you want? You paste the generated code into your project, run it, and... it doesn't quite work. So you try again with a more detailed prompt. The AI generates something different. You test again. Still not right. Before you know it, you're caught in a trial-and-error loop, spending more time debugging AI-generated code than you would have writing it yourself.

@@ -7,7 +7,6 @@ series: Building with Spec-Driven Development
 date: '2025-11-04T11:00:00Z'
 cover_image: null
 canonical_url: null
-id: 2989855
 ---
 
 In Part 1, I introduced Spec-Driven Development and explained how it provides a structured alternative to the AI chat trial-and-error loop. Now let's get concrete. This is the story of building Station Station—a real application that solves a real problem I face as a Melbourne train commuter working hybrid.
