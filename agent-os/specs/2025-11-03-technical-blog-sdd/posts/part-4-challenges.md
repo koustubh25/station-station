@@ -1,9 +1,10 @@
 ---
-title: "Building Station Station: Where SDD Helped (and Where It Didn't)"
-published: false
+title: "Part 4: Building Station Station - Where SDD Helped (and Where It Didn't)"
+published: true
 description: "An honest look at Spec-Driven Development's real-world benefits and limitations through actual debugging challenges from Station Station."
-tags: debugging, sdd, realworld, softwaredevelopment
+tags: debugging, ai, productivity, development
 series: "Building with Spec-Driven Development"
+cover_image: # Add your cover image URL here
 canonical_url:
 ---
 
@@ -461,10 +462,8 @@ If you're ready to make the call on whether Spec-Driven Development fits your wo
 **About This Series**
 
 This is Part 4 of a 5-part series on Spec-Driven Development with agent-os:
-- **Part 1**: Introduction to Spec-Driven Development
-- **Part 2**: The Station Station Project - A Real-World Case Study
-- **Part 3**: Agent-OS Workflow in Action
-- **Part 4**: Where SDD Helped (and Where It Didn't) (you are here)
-- **Part 5**: Conclusion and Decision Framework
-
-**Tags**: Software Development, Spec-Driven Development, Debugging, Real-World Experience, Agent-OS, Development Process
+- [**Part 1: Introduction to Spec-Driven Development**](#) <!-- Update with Dev.to URL after publishing -->
+- [**Part 2: The Station Station Project - A Real-World Case Study**](#) <!-- Update with Dev.to URL after publishing -->
+- [**Part 3: Agent-OS Workflow in Action**](#) <!-- Update with Dev.to URL after publishing -->
+- **Part 4: Where SDD Helped (and Where It Didn't)** (you are here)
+- [**Part 5: Should You Use Spec-Driven Development?**](#) <!-- Update with Dev.to URL after publishing -->

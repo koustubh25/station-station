@@ -1,9 +1,10 @@
 ---
-title: "Building Station Station: A Real-World SDD Case Study"
-published: false
+title: "Part 2: Building Station Station - A Real-World SDD Case Study"
+published: true
 description: "A fully functional web app solving hybrid work compliance through automated Myki transit data tracking—built in 3 days using Spec-Driven Development."
 tags: casestudy, react, python, automation
 series: "Building with Spec-Driven Development"
+cover_image: # Add your cover image URL here
 canonical_url:
 ---
 
@@ -140,6 +141,10 @@ Here's exactly what we built, broken down into three logical phases:
    - Multi-user support with user-specific configuration
    - Setup documentation and README
 
+Station Station was built incrementally over just 2-3 days using the agent-os SDD approach. The timeline shows three phases: Foundation (authentication and API discovery), Data Layer (data extraction and processing), and Integration & UI (GitHub backup and React dashboard). Each feature built on the previous one, with human review at each phase transition.
+
+![Gantt chart showing Station Station development timeline from October 31 to November 2, 2025. Phase 1 Foundation includes authentication and API reverse engineering. Phase 2 Data Layer covers SDK, card selection, and attendance logic. Phase 3 Integration and UI includes GitHub integration, frontend dashboard, and configuration management.](https://raw.githubusercontent.com/koustubh25/station-station/main/agent-os/specs/2025-11-03-technical-blog-sdd/planning/visuals/station-station-timeline.svg)
+
 The Cloudflare bypass was the critical path item. Once we solved that authentication challenge on Day 1-2, the rest of the features flowed in rapid succession. This is the power of proper sequencing—identifying technical blockers early and solving them first unlocks everything downstream.
 
 ## Try It Yourself
@@ -235,10 +240,8 @@ If you're curious how a structured workflow can make AI assistance predictable i
 **About This Series**
 
 This is Part 2 of a 5-part series on Spec-Driven Development with agent-os:
-- **Part 1**: Introduction to Spec-Driven Development
-- **Part 2**: The Station Station Project - A Real-World Case Study (you are here)
-- **Part 3**: Agent-OS Workflow in Action
-- **Part 4**: Real Challenges and AI Limitations
-- **Part 5**: Conclusion and Decision Framework
-
-**Tags**: AI, Software Development, Automation, Case Study, React, Python, Agent-OS
+- [**Part 1: Introduction to Spec-Driven Development**](#) <!-- Update with Dev.to URL after publishing -->
+- **Part 2: The Station Station Project - A Real-World Case Study** (you are here)
+- [**Part 3: Agent-OS Workflow in Action**](#) <!-- Update with Dev.to URL after publishing -->
+- [**Part 4: Where SDD Helped (and Where It Didn't)**](#) <!-- Update with Dev.to URL after publishing -->
+- [**Part 5: Should You Use Spec-Driven Development?**](#) <!-- Update with Dev.to URL after publishing -->

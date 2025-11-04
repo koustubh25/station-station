@@ -1,9 +1,10 @@
 ---
-title: "Building Station Station: Should You Use Spec-Driven Development?"
-published: false
+title: "Part 5: Building Station Station - Should You Use Spec-Driven Development?"
+published: true
 description: "A practical decision framework for choosing when Spec-Driven Development is worth the investment, based on real experience building Station Station."
-tags: decisionframework, sdd, productivity, softwaredevelopment
+tags: productivity, ai, development, tutorial
 series: "Building with Spec-Driven Development"
+cover_image: # Add your cover image URL here
 canonical_url:
 ---
 
@@ -214,16 +215,14 @@ Thanks for reading this series. Now go build something.
 **About This Series**
 
 This is Part 5 (final) of a 5-part series on Spec-Driven Development with agent-os:
-- **Part 1**: Introduction to Spec-Driven Development
-- **Part 2**: The Station Station Project - A Real-World Case Study
-- **Part 3**: Agent-OS Workflow in Action
-- **Part 4**: Where SDD Helped (and Where It Didn't)
-- **Part 5**: Should You Use Spec-Driven Development? (you are here)
+- [**Part 1: Introduction to Spec-Driven Development**](#) <!-- Update with Dev.to URL after publishing -->
+- [**Part 2: The Station Station Project - A Real-World Case Study**](#) <!-- Update with Dev.to URL after publishing -->
+- [**Part 3: Agent-OS Workflow in Action**](#) <!-- Update with Dev.to URL after publishing -->
+- [**Part 4: Where SDD Helped (and Where It Didn't)**](#) <!-- Update with Dev.to URL after publishing -->
+- **Part 5: Should You Use Spec-Driven Development?** (you are here)
 
 **Links:**
 - **Station Station Live App:** https://koustubh25.github.io/station-station/
 - **Station Station GitHub:** https://github.com/koustubh25/station-station
 - **Agent-OS GitHub:** https://github.com/cyanheads/agent-os
 - **OpenSpec GitHub:** https://github.com/openspec-dev/openspec
-
-**Tags**: Software Development, Spec-Driven Development, Decision Framework, Agent-OS, Productivity, Project Management

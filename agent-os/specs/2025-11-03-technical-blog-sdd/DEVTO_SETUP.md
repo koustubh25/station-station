@@ -57,12 +57,46 @@ Post content here...
 
 ### Front Matter Fields
 
-- **title** (required): The post title
+- **title** (required): The post title - includes part number (e.g., "Part 1: Introduction...")
 - **published** (required): `true` to publish, `false` to save as draft
 - **description** (required): Brief description (max 158 characters recommended)
-- **tags** (required): Up to 4 tags, comma-separated
+- **tags** (required): Up to 4 tags, comma-separated (use existing Dev.to tags for better discoverability)
 - **series** (optional): Series name if this is part of a series
+- **cover_image** (optional): URL to cover image (see Cover Images section below)
 - **canonical_url** (optional): If you're cross-posting from another blog
+
+### Cover Images
+
+To add a cover image to your posts:
+
+1. **Option 1: Host in GitHub repository**
+   - Create an `images/` folder in your repository
+   - Add your cover image (recommended size: 1000x420 pixels)
+   - Commit and push
+   - Use the raw GitHub URL: `https://raw.githubusercontent.com/username/repo/main/images/cover.jpg`
+
+2. **Option 2: Use external hosting**
+   - Upload to Unsplash, Imgur, or similar service
+   - Copy the direct image URL
+   - Add to `cover_image` field
+
+3. **Option 3: Upload directly to Dev.to**
+   - Leave `cover_image` field blank
+   - After the post syncs, edit it on Dev.to
+   - Upload cover image through Dev.to's editor
+   - Subsequent syncs won't override the image
+
+### Linking Posts in the Series
+
+All posts include placeholder links at the bottom in the "About This Series" section. After publishing:
+
+1. Publish all 5 posts to Dev.to (they'll start as drafts)
+2. Note the URL for each post on Dev.to
+3. Update the markdown files to replace `#` with actual Dev.to URLs:
+   ```markdown
+   - [**Part 1: Introduction to Spec-Driven Development**](https://dev.to/username/part-1-slug)
+   ```
+4. Commit and push - the action will update the posts with working links
 
 ## Publishing Workflow
 

@@ -1,9 +1,10 @@
 ---
-title: "Building Station Station: Agent-OS Workflow in Action"
-published: false
+title: "Part 3: Building Station Station - Agent-OS Workflow in Action"
+published: true
 description: "From raw idea to deployed code: the complete agent-os workflow for Spec-Driven Development, using real examples from Station Station."
-tags: workflow, agentos, claude, softwaredevelopment
+tags: workflow, ai, claude, productivity
 series: "Building with Spec-Driven Development"
+cover_image: # Add your cover image URL here
 canonical_url:
 ---
 
@@ -226,6 +227,22 @@ This isn't the default (and probably shouldn't be for unfamiliar projects), but 
 
 **Human role here:** Code review, manual testing, and deployment decisions. AI can generate the boilerplate, but you verify it works in your specific context.
 
+## The Complete Agent-OS Workflow
+
+Now that we've walked through all five phases, let's see how they fit together into a complete cycle.
+
+The agent-os workflow follows a structured, iterative cycle. Notice the feedback loop where human review catches issues that require debugging before the feature is complete. This isn't full automation—it's a partnership where AI handles implementation and humans guide the architecture and review the results.
+
+![Agent-OS workflow diagram showing iterative cycle: Create Product, Shape Spec, Write Spec, Write Tasks, Implement Tasks, Human Review with feedback loop for debugging and refinement until feature is complete.](https://raw.githubusercontent.com/koustubh25/station-station/main/agent-os/specs/2025-11-03-technical-blog-sdd/planning/visuals/agent-os-workflow-diagram.svg)
+
+### Human Review at Key Decision Points
+
+This sequence diagram reveals the continuous human-AI collaboration throughout development. Review happens at multiple stages, not just at the end. Each phase includes a human checkpoint where you validate the AI's work before proceeding.
+
+![Sequence diagram showing Agent-OS task execution flow: Human provides feature idea to Spec Writer, who gathers requirements and generates detailed spec. Task Writer breaks spec into tasks for Human approval. Task Implementer executes each task, writes tests, and submits for Review. Human reviews results and either approves or provides guidance for fixes. Process loops until feature is complete.](https://raw.githubusercontent.com/koustubh25/station-station/main/agent-os/specs/2025-11-03-technical-blog-sdd/planning/visuals/agent-os-task-execution-flow.svg)
+
+The key insight: this is continuous collaboration, not "AI does everything then human reviews at the end." You're involved throughout, making architectural decisions, reviewing outputs, and course-correcting when needed.
+
 ## The Iterative Reality
 
 Here's what the spec doesn't show: iteration. The workflow diagrams make it look linear, but reality is messier.
@@ -284,10 +301,8 @@ If you're wondering whether this structured approach is always worth it—or whe
 **About This Series**
 
 This is Part 3 of a 5-part series on Spec-Driven Development with agent-os:
-- **Part 1**: Introduction to Spec-Driven Development
-- **Part 2**: The Station Station Project - A Real-World Case Study
-- **Part 3**: Agent-OS Workflow in Action (you are here)
-- **Part 4**: Real Challenges and AI Limitations
-- **Part 5**: Conclusion and Decision Framework
-
-**Tags**: AI, Software Development, Automation, Agent-OS, Workflow, React, Python
+- [**Part 1: Introduction to Spec-Driven Development**](#) <!-- Update with Dev.to URL after publishing -->
+- [**Part 2: The Station Station Project - A Real-World Case Study**](#) <!-- Update with Dev.to URL after publishing -->
+- **Part 3: Agent-OS Workflow in Action** (you are here)
+- [**Part 4: Where SDD Helped (and Where It Didn't)**](#) <!-- Update with Dev.to URL after publishing -->
+- [**Part 5: Should You Use Spec-Driven Development?**](#) <!-- Update with Dev.to URL after publishing -->

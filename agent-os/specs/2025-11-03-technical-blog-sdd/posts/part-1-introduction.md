@@ -1,9 +1,10 @@
 ---
-title: "Spec-Driven Development: Building Predictable AI-Assisted Software"
-published: false
+title: "Part 1: Spec-Driven Development - Building Predictable AI-Assisted Software"
+published: true
 description: "Learn how Spec-Driven Development provides structure and predictability to AI-assisted coding, avoiding the trial-and-error loop of traditional AI chat interactions."
-tags: ai, softwaredevelopment, claude, productivity
+tags: ai, productivity, claude, automation
 series: "Building with Spec-Driven Development"
+cover_image: # Add your cover image URL here (e.g., https://raw.githubusercontent.com/username/repo/main/images/cover.jpg)
 canonical_url:
 ---
 
@@ -12,6 +13,16 @@ You know that feeling when you're chatting with an AI coding assistant, and it s
 I've been there. And I've found a better way.
 
 This is the first part of a series where I'll share how I built Station Station—a personal project for tracking Melbourne train commuters' office attendance—using Spec-Driven Development (SDD). This isn't a promotional piece. I'm going to show you the actual challenges, the times when AI failed spectacularly, and the structured approach that made AI assistance genuinely productive instead of frustrating. By the end of this series, you'll have a clear framework for deciding when SDD makes sense for your projects and when it's overkill.
+
+## Vibe Coding vs Spec-Driven Development
+
+That trial-and-error loop I described? It's often called **"vibe coding"**—chatting with AI, trying what it suggests, debugging when it breaks, and iterating until something works. No upfront planning, no structure, just vibing with the AI and seeing where it takes you. For quick experiments and throwaway scripts, vibe coding is perfectly fine. But for real projects you want to finish and maintain? The lack of structure becomes a problem.
+
+**Spec-Driven Development takes a different approach**: structure first, then code. Instead of chatting your way to a solution, you invest time upfront to document what you're building, why you're building it, and what success looks like. Then you let AI implement those documented requirements. The AI still does the heavy lifting, but within guardrails you've defined.
+
+The contrast is striking. Traditional AI chat often becomes a trial-and-error loop—you provide a vague prompt, get generated code, test it, realize it doesn't quite work, and start over. Spec-Driven Development follows a predictable path: gather requirements, write detailed specifications, break into tasks, implement systematically, and produce reviewable output. You spend more time upfront on specs, but save time on debugging and rework.
+
+![Side-by-side comparison: Traditional AI Chat shows trial-and-error loop with vague prompts leading to repeated attempts until code works. Spec-Driven Development shows linear progression from requirements to specification to implementation to reviewable output.](https://raw.githubusercontent.com/koustubh25/station-station/main/agent-os/specs/2025-11-03-technical-blog-sdd/planning/visuals/sdd-vs-traditional-comparison.svg)
 
 ## What Is Spec-Driven Development?
 
@@ -93,8 +104,8 @@ If you're tired of the AI chat trial-and-error loop, if you want to leverage AI 
 **About This Series**
 
 This is Part 1 of a 5-part series on Spec-Driven Development with agent-os:
-- **Part 1**: Introduction to Spec-Driven Development (you are here)
-- **Part 2**: The Station Station Project - A Real-World Case Study
-- **Part 3**: Agent-OS Workflow in Action
-- **Part 4**: Real Challenges and AI Limitations
-- **Part 5**: Conclusion and Decision Framework
+- **Part 1: Introduction to Spec-Driven Development** (you are here)
+- [**Part 2: The Station Station Project - A Real-World Case Study**](#) <!-- Update with Dev.to URL after publishing -->
+- [**Part 3: Agent-OS Workflow in Action**](#) <!-- Update with Dev.to URL after publishing -->
+- [**Part 4: Where SDD Helped (and Where It Didn't)**](#) <!-- Update with Dev.to URL after publishing -->
+- [**Part 5: Should You Use Spec-Driven Development?**](#) <!-- Update with Dev.to URL after publishing -->

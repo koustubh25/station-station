@@ -58,27 +58,55 @@ flowchart TD
 
 **Mermaid Code:**
 ```mermaid
-flowchart LR
-    subgraph Traditional["Traditional AI Chat"]
-        direction TB
-        T1[Vague Prompt] --> T2[AI Generates Code]
-        T2 --> T3[Trial & Error]
-        T3 --> T4{Works?}
-        T4 -->|No| T1
-        T4 -->|Yes| T5[Done]
-    end
+graph TB
+    TH["<b>❌ Traditional AI Chat (Vibe Coding)</b>"]
+    T1[Vague Prompt]
+    T2[AI Generates Code]
+    T3[Trial & Error]
+    T4{Works?}
+    T5[Done]
 
-    subgraph SDD["Spec-Driven Development"]
-        direction TB
-        S1[Requirements Gathering] --> S2[Detailed Specification]
-        S2 --> S3[Task Breakdown]
-        S3 --> S4[Structured Implementation]
-        S4 --> S5[Reviewable Output]
-        S5 --> S6[Done]
-    end
+    SH["<b>✅ Spec-Driven Development</b>"]
+    S1[Requirements Gathering]
+    S2[Detailed Specification]
+    S3[Task Breakdown]
+    S4[Structured Implementation]
+    S5[Reviewable Output]
+    S6[Done]
 
-    style Traditional fill:#ffe1e1
-    style SDD fill:#e1f5e1
+    TH ~~~ T1
+    T1 --> T2
+    T2 --> T3
+    T3 --> T4
+    T4 -->|No| T1
+    T4 -->|Yes| T5
+
+    SH ~~~ S1
+    S1 --> S2
+    S2 --> S3
+    S3 --> S4
+    S4 --> S5
+    S5 --> S6
+
+    T1 ~~~ S1
+    T2 ~~~ S2
+    T3 ~~~ S3
+    T4 ~~~ S4
+    T5 ~~~ S5
+
+    style TH fill:#ffe1e1,stroke:#ff6b6b,stroke-width:3px,color:#000
+    style SH fill:#e1f5e1,stroke:#51cf66,stroke-width:3px,color:#000
+    style T1 fill:#fff,stroke:#ff6b6b
+    style T2 fill:#fff,stroke:#ff6b6b
+    style T3 fill:#fff,stroke:#ff6b6b
+    style T4 fill:#fff,stroke:#ff6b6b
+    style T5 fill:#fff,stroke:#ff6b6b
+    style S1 fill:#fff,stroke:#51cf66
+    style S2 fill:#fff,stroke:#51cf66
+    style S3 fill:#fff,stroke:#51cf66
+    style S4 fill:#fff,stroke:#51cf66
+    style S5 fill:#fff,stroke:#51cf66
+    style S6 fill:#fff,stroke:#51cf66
 ```
 
 **Alt Text:**
