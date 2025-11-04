@@ -141,10 +141,6 @@ Here's exactly what we built, broken down into three logical phases:
    - Multi-user support with user-specific configuration
    - Setup documentation and README
 
-Station Station was built incrementally over just 2-3 days using the agent-os SDD approach. The timeline shows three phases: Foundation (authentication and API discovery), Data Layer (data extraction and processing), and Integration & UI (GitHub backup and React dashboard). Each feature built on the previous one, with human review at each phase transition.
-
-![Gantt chart showing Station Station development timeline from October 31 to November 2, 2025. Phase 1 Foundation includes authentication and API reverse engineering. Phase 2 Data Layer covers SDK, card selection, and attendance logic. Phase 3 Integration and UI includes GitHub integration, frontend dashboard, and configuration management.](https://raw.githubusercontent.com/koustubh25/station-station/main/agent-os/specs/2025-11-03-technical-blog-sdd/planning/visuals/station-station-timeline.svg)
-
 The Cloudflare bypass was the critical path item. Once we solved that authentication challenge on Day 1-2, the rest of the features flowed in rapid succession. This is the power of proper sequencing—identifying technical blockers early and solving them first unlocks everything downstream.
 
 ## Try It Yourself
