@@ -1,11 +1,13 @@
 ---
-title: "Part 4: Building Station Station - Where SDD Helped (and Where It Didn't)"
+title: 'Part 4: Building Station Station - Where SDD Helped (and Where It Didn''t)'
 published: true
-description: "An honest look at Spec-Driven Development's real-world benefits and limitations through actual debugging challenges from Station Station."
-tags: debugging, ai, productivity, development
-series: "Building with Spec-Driven Development"
-cover_image: # Add your cover image URL here
-canonical_url:
+description: An honest look at Spec-Driven Development's real-world benefits and limitations through actual debugging challenges from Station Station.
+tags: 'debugging, ai, productivity, development'
+series: Building with Spec-Driven Development
+cover_image: null
+canonical_url: null
+id: 2989847
+date: '2025-11-04T04:54:19Z'
 ---
 
 In Parts 1-3, we covered Spec-Driven Development, the Station Station project, and the agent-os workflow. We saw a structured process that delivered 8 features, fully deployed and working. But I've been painting a rosy picture. Let me be honest about the challenges.
