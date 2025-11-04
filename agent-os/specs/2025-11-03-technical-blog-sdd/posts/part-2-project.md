@@ -2,7 +2,7 @@
 title: 'Part 2: Building Station Station - A Real-World SDD Case Study'
 published: true
 description: A fully functional web app solving hybrid work compliance through automated Myki transit data tracking—built in 3 days using Spec-Driven Development.
-tags: 'casestudy, react, python, automation'
+tags: 'specdriven, agentos, react, python'
 series: Building with Spec-Driven Development
 id: 2989891
 date: '2025-11-04T05:41:57Z'

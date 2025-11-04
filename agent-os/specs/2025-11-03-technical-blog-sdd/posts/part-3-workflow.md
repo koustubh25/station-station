@@ -2,7 +2,7 @@
 title: 'Part 3: Building Station Station - Agent-OS Workflow in Action'
 published: true
 description: 'From raw idea to deployed code: the complete agent-os workflow for Spec-Driven Development, using real examples from Station Station.'
-tags: 'workflow, ai, claude, productivity'
+tags: 'specdriven, agentos, ai, claude'
 series: Building with Spec-Driven Development
 id: 2989895
 date: '2025-11-04T05:43:12Z'
