@@ -296,13 +296,3 @@ But this is the part where I need to be honest about limitations. The workflow i
 
 If you're wondering whether this structured approach is always worth it—or where it breaks down—Part 4 has the answers.
 
----
-
-**About This Series**
-
-This is Part 3 of a 5-part series on Spec-Driven Development with agent-os:
-- [**Part 1: Introduction to Spec-Driven Development**](#) <!-- Update with Dev.to URL after publishing -->
-- [**Part 2: The Station Station Project - A Real-World Case Study**](#) <!-- Update with Dev.to URL after publishing -->
-- **Part 3: Agent-OS Workflow in Action** (you are here)
-- [**Part 4: Where SDD Helped (and Where It Didn't)**](#) <!-- Update with Dev.to URL after publishing -->
-- [**Part 5: Should You Use Spec-Driven Development?**](#) <!-- Update with Dev.to URL after publishing -->

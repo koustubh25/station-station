@@ -99,13 +99,3 @@ In Part 2, we'll explore the Station Station project in detail: the problem it s
 
 If you're tired of the AI chat trial-and-error loop, if you want to leverage AI assistance without sacrificing code quality, or if you're just curious how a structured spec can turn AI from unpredictable to reliable—stick around. This series will show you exactly how it works, warts and all.
 
----
-
-**About This Series**
-
-This is Part 1 of a 5-part series on Spec-Driven Development with agent-os:
-- **Part 1: Introduction to Spec-Driven Development** (you are here)
-- [**Part 2: The Station Station Project - A Real-World Case Study**](#) <!-- Update with Dev.to URL after publishing -->
-- [**Part 3: Agent-OS Workflow in Action**](#) <!-- Update with Dev.to URL after publishing -->
-- [**Part 4: Where SDD Helped (and Where It Didn't)**](#) <!-- Update with Dev.to URL after publishing -->
-- [**Part 5: Should You Use Spec-Driven Development?**](#) <!-- Update with Dev.to URL after publishing -->

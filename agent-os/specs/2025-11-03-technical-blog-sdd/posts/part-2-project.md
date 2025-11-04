@@ -231,13 +231,3 @@ In Part 3, we'll walk through the complete agent-os workflow: creating a product
 
 If you're curious how a structured workflow can make AI assistance predictable instead of frustrating, Part 3 is where we dive deep into the mechanics.
 
----
-
-**About This Series**
-
-This is Part 2 of a 5-part series on Spec-Driven Development with agent-os:
-- [**Part 1: Introduction to Spec-Driven Development**](#) <!-- Update with Dev.to URL after publishing -->
-- **Part 2: The Station Station Project - A Real-World Case Study** (you are here)
-- [**Part 3: Agent-OS Workflow in Action**](#) <!-- Update with Dev.to URL after publishing -->
-- [**Part 4: Where SDD Helped (and Where It Didn't)**](#) <!-- Update with Dev.to URL after publishing -->
-- [**Part 5: Should You Use Spec-Driven Development?**](#) <!-- Update with Dev.to URL after publishing -->
