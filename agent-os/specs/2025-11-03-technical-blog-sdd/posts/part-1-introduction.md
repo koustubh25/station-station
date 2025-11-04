@@ -2,7 +2,7 @@
 title: 'Part 1: Spec-Driven Development - Building Predictable AI-Assisted Software'
 published: true
 description: 'Learn how Spec-Driven Development provides structure and predictability to AI-assisted coding, avoiding the trial-and-error loop of traditional AI chat interactions.'
-tags: 'ai, productivity, claude, automation'
+tags: 'ai, productivity, claude, tutorial'
 series: Building with Spec-Driven Development
 id: 2989894
 date: '2025-11-04T05:40:36Z'

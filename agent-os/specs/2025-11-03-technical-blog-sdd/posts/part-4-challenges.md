@@ -2,7 +2,7 @@
 title: 'Part 4: Building Station Station - Where SDD Helped (and Where It Didn''t)'
 published: true
 description: An honest look at Spec-Driven Development's real-world benefits and limitations through actual debugging challenges from Station Station.
-tags: 'debugging, ai, productivity, development'
+tags: 'debugging, ai, claude, development'
 series: Building with Spec-Driven Development
 id: 2989892
 date: '2025-11-04T05:45:52Z'

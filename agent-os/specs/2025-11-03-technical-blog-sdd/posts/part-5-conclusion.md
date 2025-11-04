@@ -2,7 +2,7 @@
 title: 'Part 5: Building Station Station - Should You Use Spec-Driven Development?'
 published: true
 description: 'A practical decision framework for choosing when Spec-Driven Development is worth the investment, based on real experience building Station Station.'
-tags: 'productivity, ai, development, tutorial'
+tags: 'productivity, ai, claude, tutorial'
 series: Building with Spec-Driven Development
 id: 2989893
 date: '2025-11-04T05:46:51Z'
