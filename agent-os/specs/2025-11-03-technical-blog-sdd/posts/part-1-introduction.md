@@ -8,7 +8,7 @@ id: 2989894
 date: '2025-11-04T05:40:36Z'
 ---
 
-You know that feeling when you're using GitHub Copilot, Cursor, or ChatGPT to generate code, and it seems to understand exactly what you want? The AI suggests a complete implementation. You accept it, run your tests, and... something's off. So you refine your prompt with more context. The AI generates a different approach. Tests still fail. You add more details to your conversation, but now the context is getting long and the AI starts hallucinating—confidently suggesting functions that don't exist, mixing up variable names, or contradicting its earlier recommendations. Before you know it, you're caught in a trial-and-error loop, spending more time debugging and re-prompting than you would have writing it yourself.
+You know that feeling when you're using AI to generate code, and it seems to understand exactly what you want? The AI suggests a complete implementation. You accept it, run your tests, and... something's off. So you refine your prompt with more context. The AI generates a different approach. Tests still fail. You add more details to your conversation, but now the context is getting long and the AI starts hallucinating—confidently suggesting functions that don't exist, mixing up variable names, or contradicting its earlier recommendations. Before you know it, you're caught in a trial-and-error loop, spending more time debugging and re-prompting than you would have writing it yourself.
 
 I've been there. And I've found a better way.
 
