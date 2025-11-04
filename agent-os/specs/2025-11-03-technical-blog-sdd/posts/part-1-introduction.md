@@ -22,7 +22,7 @@ That trial-and-error loop I described? It's often called **"vibe coding"**—cha
 
 The contrast is striking. Traditional AI chat often becomes a trial-and-error loop—you provide a vague prompt, get generated code, test it, realize it doesn't quite work, and start over. Spec-Driven Development follows a predictable path: gather requirements, write detailed specifications, break into tasks, implement systematically, and produce reviewable output. You spend more time upfront on specs, but save time on debugging and rework.
 
-![Side-by-side comparison: Traditional AI Chat shows trial-and-error loop with vague prompts leading to repeated attempts until code works. Spec-Driven Development shows linear progression from requirements to specification to implementation to reviewable output.](https://raw.githubusercontent.com/koustubh25/station-station/main/agent-os/specs/2025-11-03-technical-blog-sdd/planning/visuals/sdd-vs-traditional-comparison.png)
+<img src="https://raw.githubusercontent.com/koustubh25/station-station/main/agent-os/specs/2025-11-03-technical-blog-sdd/planning/visuals/sdd-vs-traditional-comparison.png" alt="Side-by-side comparison: Traditional AI Chat shows trial-and-error loop with vague prompts leading to repeated attempts until code works. Spec-Driven Development shows linear progression from requirements to specification to implementation to reviewable output" style="background-color: white; padding: 10px;" />
 
 ## What Is Spec-Driven Development?
 

@@ -233,13 +233,13 @@ Now that we've walked through all five phases, let's see how they fit together i
 
 The agent-os workflow follows a structured, iterative cycle. Notice the feedback loop where human review catches issues that require debugging before the feature is complete. This isn't full automation—it's a partnership where AI handles implementation and humans guide the architecture and review the results.
 
-![Agent-OS workflow diagram showing iterative cycle: Create Product, Shape Spec, Write Spec, Write Tasks, Implement Tasks, Human Review with feedback loop for debugging and refinement until feature is complete.](https://raw.githubusercontent.com/koustubh25/station-station/main/agent-os/specs/2025-11-03-technical-blog-sdd/planning/visuals/agent-os-workflow-diagram.png)
+<img src="https://raw.githubusercontent.com/koustubh25/station-station/main/agent-os/specs/2025-11-03-technical-blog-sdd/planning/visuals/agent-os-workflow-diagram.png" alt="Agent-OS workflow diagram showing iterative cycle: Create Product, Shape Spec, Write Spec, Write Tasks, Implement Tasks, Human Review with feedback loop for debugging and refinement until feature is complete" style="background-color: white; padding: 10px;" />
 
 ### Human Review at Key Decision Points
 
 This sequence diagram reveals the continuous human-AI collaboration throughout development. Review happens at multiple stages, not just at the end. Each phase includes a human checkpoint where you validate the AI's work before proceeding.
 
-![Sequence diagram showing Agent-OS task execution flow: Human provides feature idea to Spec Writer, who gathers requirements and generates detailed spec. Task Writer breaks spec into tasks for Human approval. Task Implementer executes each task, writes tests, and submits for Review. Human reviews results and either approves or provides guidance for fixes. Process loops until feature is complete.](https://raw.githubusercontent.com/koustubh25/station-station/main/agent-os/specs/2025-11-03-technical-blog-sdd/planning/visuals/agent-os-task-execution-flow.png)
+<img src="https://raw.githubusercontent.com/koustubh25/station-station/main/agent-os/specs/2025-11-03-technical-blog-sdd/planning/visuals/agent-os-task-execution-flow.png" alt="Sequence diagram showing Agent-OS task execution flow: Human provides feature idea to Spec Writer, who gathers requirements and generates detailed spec. Task Writer breaks spec into tasks for Human approval. Task Implementer executes each task, writes tests, and submits for Review. Human reviews results and either approves or provides guidance for fixes. Process loops until feature is complete" style="background-color: white; padding: 10px;" />
 
 The key insight: this is continuous collaboration, not "AI does everything then human reviews at the end." You're involved throughout, making architectural decisions, reviewing outputs, and course-correcting when needed.
 
