@@ -2,6 +2,81 @@
 
 Automated authentication system for the Myki public transport API with Cloudflare Turnstile bypass, plus multi-user work attendance tracking.
 
+**Live Application:** https://koustubh25.github.io/station-station/
+
+## Getting Started - Two Options
+
+### Option 1: Get Onboarded to the Existing App
+
+Want to see your attendance on the same dashboard? Here's how:
+
+**Prerequisites:**
+- Active Myki account at https://www.ptv.vic.gov.au/tickets/myki/
+- Your Myki card registered to your PTV account
+
+1. **Add your configuration** to the system:
+   - Fork this repository
+   - Add your details to `config/myki_config.json`:
+     ```json
+     {
+       "users": {
+         "yourname": {
+           "mykiCardNumber": "123456789012345",
+           "targetStation": "Your Work Station",
+           "startDate": "2025-04-15"
+         }
+       }
+     }
+     ```
+   - Submit a pull request with your config changes
+
+2. **Email your Myki credentials** to **kosta250@gmail.com**:
+   - Your Myki username (the key you used in the config, e.g., "yourname")
+   - Your Myki password
+   - I'll securely add them as encrypted GitHub secrets
+
+3. **View your attendance** at https://koustubh25.github.io/station-station/
+   - Select your name from the dropdown
+   - See your attendance calendar, statistics, and trends
+   - Data updates automatically every day
+
+**Privacy & Security:**
+- Your credentials are stored as encrypted GitHub secrets
+- Only I have access to the secrets
+- Your attendance data is visible on the shared dashboard (anyone can see your attendance %)
+- All processing happens on GitHub servers (zero cost for you)
+
+### Option 2: Fork and Deploy Your Own
+
+Want complete control and privacy? Deploy your own instance:
+
+**Prerequisites:**
+- Active Myki account at https://www.ptv.vic.gov.au/tickets/myki/
+- Your Myki card registered to your PTV account
+
+1. **Fork this repository** to your GitHub account
+
+2. **Set up GitHub secrets** in your forked repo:
+   - Go to Settings → Secrets and variables → Actions
+   - Add secrets for each user (see [Multi-User Configuration](#multi-user-configuration) below)
+
+3. **Configure your users** in `config/myki_config.json`
+
+4. **Enable GitHub Actions** in your forked repo
+
+5. **Deploy to GitHub Pages**:
+   - Go to Settings → Pages
+   - Set source to "GitHub Actions"
+   - Your app will be live at `https://YOUR_USERNAME.github.io/station-station/`
+
+**Benefits:**
+- Complete privacy (only you can see the data)
+- Full control over the code and configuration
+- Free hosting (GitHub Actions + GitHub Pages)
+- Automatic daily updates
+
+See **[SETUP.md](SETUP.md)** for detailed deployment instructions.
+
 ## Overview
 
 This project provides a complete solution for:
