@@ -4,6 +4,7 @@ published: false
 description: 'A practical decision framework for choosing when Spec-Driven Development is worth the investment, based on real experience building Station Station.'
 tags: 'productivity, ai, development, tutorial'
 series: Building with Spec-Driven Development
+id: 2989893
 ---
 
 We've covered a lot in this series. In Part 1, we introduced Spec-Driven Development. In Part 2, we explored the Station Station project—8 features solving a real hybrid work compliance problem. In Part 3, we walked through the agent-os workflow. In Part 4, we got honest about the challenges and limitations.
