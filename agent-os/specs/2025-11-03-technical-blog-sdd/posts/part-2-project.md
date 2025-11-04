@@ -4,8 +4,6 @@ published: false
 description: A fully functional web app solving hybrid work compliance through automated Myki transit data tracking—built in 3 days using Spec-Driven Development.
 tags: 'casestudy, react, python, automation'
 series: Building with Spec-Driven Development
-cover_image: null
-canonical_url: null
 ---
 
 In Part 1, I introduced Spec-Driven Development and explained how it provides a structured alternative to the AI chat trial-and-error loop. Now let's get concrete. This is the story of building Station Station—a real application that solves a real problem I face as a Melbourne train commuter working hybrid.
