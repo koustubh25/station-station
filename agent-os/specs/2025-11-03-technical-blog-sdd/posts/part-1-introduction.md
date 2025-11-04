@@ -38,7 +38,7 @@ OpenSpec focuses on change proposals for existing systems. Its workflow centers 
 
 For Station Station, I chose **[agent-os](https://buildermethods.com/agent-os)**, which is optimized for building complete products from scratch. It handles the full product lifecycle—from initial idea through deployment—with deep Claude integration and sophisticated multi-agent orchestration. The spec format is requirements-based with explicit goals, user stories, and technical implementation details. They've recently introduced [version 2](https://buildermethods.com/agent-os/version-2) with enhanced capabilities.
 
-Since I was building a greenfield personal project solo with Claude, agent-os was the natural fit. If I were proposing changes to an existing codebase with a team using various AI tools, OpenSpec would probably make more sense.
+Since I was building a greenfield personal project solo with Claude, agent-os was the natural fit.
 
 The important thing isn't which SDD tool you use—it's that you use *some* structure to align human intent with AI implementation.
 
