@@ -52,7 +52,6 @@ headers*.json
 auth_request*.json
 
 # User configuration files
-config/myki_config.json
 # Deprecated filename (renamed from myki_tracker_config.json to myki_config.json)
 config/myki_tracker_config.json
 # Keep example configs
