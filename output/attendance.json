@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "generatedAt": "2025-11-25T01:14:20Z",
-    "configPath": "/tmp/tmpj5chk3df.json",
+    "generatedAt": "2025-11-26T01:15:14Z",
+    "configPath": "/tmp/tmp28vdcaf2.json",
     "totalUsers": 1
   },
   "koustubh": {
@@ -61,16 +61,16 @@
     ],
     "latestProcessedDate": "2025-11-17T09:00:42+11:00",
     "targetStation": "Southern Cross Station",
-    "lastUpdated": "2025-11-25T01:14:20Z",
+    "lastUpdated": "2025-11-26T01:15:14Z",
     "statistics": {
-      "totalWorkingDays": 152,
+      "totalWorkingDays": 153,
       "daysAttended": 52,
-      "daysMissed": 100,
-      "attendancePercentage": 34.21,
+      "daysMissed": 101,
+      "attendancePercentage": 33.99,
       "firstAttendance": "2025-05-08",
       "lastAttendance": "2025-11-17",
       "periodStart": "2025-04-15",
-      "periodEnd": "2025-11-25",
+      "periodEnd": "2025-11-26",
       "monthlyBreakdown": [
         {
           "month": "2025-04",
@@ -123,10 +123,10 @@
         },
         {
           "month": "2025-11",
-          "workingDays": 15,
+          "workingDays": 16,
           "daysAttended": 6,
-          "daysMissed": 9,
-          "attendancePercentage": 40.0
+          "daysMissed": 10,
+          "attendancePercentage": 37.5
         }
       ]
     },
