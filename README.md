@@ -21,9 +21,10 @@ Want to see your attendance on the same dashboard? Here's how:
      {
        "users": {
          "yourname": {
-           "mykiCardNumber": "123456789012345",
            "targetStation": "Your Work Station",
-           "startDate": "2025-04-15"
+           "skipDates": [],
+           "startDate": "2025-04-15",
+           "manualAttendanceDates": []
          }
        }
      }
@@ -130,14 +131,16 @@ python src/run_myki_workflow.py
 {
   "users": {
     "koustubh": {
-      "mykiCardNumber": "123456789012345",
       "targetStation": "Heathmont Station",
-      "startDate": "2025-04-15"
+      "skipDates": [],
+      "startDate": "2025-04-15",
+      "manualAttendanceDates": []
     },
     "john": {
-      "mykiCardNumber": "123456789012345",
       "targetStation": "Melbourne Central",
-      "startDate": "2025-01-01"
+      "skipDates": [],
+      "startDate": "2025-01-01",
+      "manualAttendanceDates": []
     }
   }
 }
@@ -165,7 +168,8 @@ If you only want to use the authentication and API client without the attendance
 
 1. **Clone the repository**
    ```bash
-   cd /path/to/station-station-agentos
+   git clone https://github.com/koustubh25/station-station.git
+   cd station-station
    ```
 
 2. **Create virtual environment**
@@ -188,9 +192,9 @@ If you only want to use the authentication and API client without the attendance
 
    Create a `.env` file in the project root:
    ```env
-   MYKI_USERNAME=your_username_here
-   MYKI_PASSWORD=your_password_here
+   MYKI_PASSWORD_YOURNAME=your_password_here
    ```
+   Replace `YOURNAME` with your username from the config (uppercase)
 
 ## Usage
 
@@ -211,11 +215,11 @@ This will:
 6. Save all authentication data to `auth_data/` directory
 
 **Files created:**
-- `auth_data/session.json` - Complete session data
-- `auth_data/cookies.json` - Session cookies
-- `auth_data/headers.json` - Request headers
-- `auth_data/auth_request.json` - Authentication request/response details
-- `auth_data/bearer_token.txt` - Bearer token for authorization
+- `auth_data/session_{username}.json` - Complete session data per user
+- `auth_data/cookies_{username}.json` - Session cookies per user
+- `auth_data/headers_{username}.json` - Request headers per user
+- `auth_data/auth_request_{username}.json` - Authentication request/response details per user
+- `auth_data/bearer_token_{username}.txt` - Bearer token for authorization per user
 
 ### Step 2: Use the API Client
 
@@ -224,14 +228,11 @@ After authentication, use the API client to make requests:
 ```python
 from src.myki_api_client import MykiAPIClient
 
-# Initialize client (automatically loads saved authentication data)
-client = MykiAPIClient()
+# Initialize client with username (loads that user's authentication data)
+client = MykiAPIClient(username="yourname")
 
-# Get transactions for a specific myki card
-transactions = client.get_transactions(
-    card_number="YOUR_CARD_NUMBER",  # e.g., "123456789012345"
-    page=0
-)
+# Get transactions (page parameter for pagination)
+transactions = client.get_transactions(page=0)
 
 # Print results
 print(transactions)
@@ -297,26 +298,28 @@ The attendance tracker generates `output/attendance.json` with statistics:
 
 ## API Client Methods
 
-### `MykiAPIClient()`
+### `MykiAPIClient(username)`
 
-Initialize the API client. Automatically loads saved authentication data.
-
-```python
-client = MykiAPIClient()
-```
-
-### `get_transactions(card_number, page=0)`
-
-Retrieve transaction history for a specific myki card.
+Initialize the API client for a specific user. Automatically loads saved authentication data for that user.
 
 **Parameters:**
-- `card_number` (str): The myki card number
+- `username` (str): The username from config (e.g., "koustubh")
+
+```python
+client = MykiAPIClient(username="koustubh")
+```
+
+### `get_transactions(page=0)`
+
+Retrieve transaction history for the authenticated user.
+
+**Parameters:**
 - `page` (int): Page number for pagination (default: 0)
 
 **Returns:** Dictionary containing transaction data
 
 ```python
-transactions = client.get_transactions("123456789012345", page=0)
+transactions = client.get_transactions(page=0)
 ```
 
 ## Architecture
@@ -407,10 +410,9 @@ Retrieve transaction history for a myki card.
 
 **Request Body:**
 ```json
-{
-  "mykiCardNumber": "123456789012345"
-}
+{}
 ```
+Note: No request body needed - authentication is via headers and cookies
 
 **Response:**
 ```json
@@ -524,6 +526,7 @@ Example:
 - Rate limiting: Avoid multiple rapid authentication attempts
 - Multi-user authentication is sequential (45-60s per user)
 - Melbourne VIC public holidays only (not configurable for other regions)
+- Single card per user: If you have multiple Myki cards on your account, only the first card's transactions will be tracked
 
 ## Future Enhancements
 
@@ -534,6 +537,7 @@ Example:
 - ✅ ~~Statistics and analytics (overall + monthly breakdown)~~ (COMPLETED)
 - ✅ ~~Code refactoring into focused modules~~ (COMPLETED)
 - Automatic token refresh when expired
+- Support for multiple Myki cards per user account
 - Support for additional API endpoints (balance, card details, etc.)
 - Cloud Run deployment with profile persistence
 - Parallel multi-user authentication (reduce total time)
