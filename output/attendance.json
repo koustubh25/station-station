@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "generatedAt": "2026-02-13T01:54:08Z",
-    "configPath": "/tmp/tmp7j062wbe.json",
+    "generatedAt": "2026-02-14T01:44:50Z",
+    "configPath": "/tmp/tmp0putm89f.json",
     "totalUsers": 1
   },
   "koustubh": {
@@ -76,7 +76,7 @@
     ],
     "latestProcessedDate": "2026-02-04T09:09:20+11:00",
     "targetStation": "Southern Cross Station",
-    "lastUpdated": "2026-02-13T01:54:08Z",
+    "lastUpdated": "2026-02-14T01:44:50Z",
     "statistics": {
       "totalWorkingDays": 187,
       "daysAttended": 67,
@@ -85,7 +85,7 @@
       "firstAttendance": "2025-05-08",
       "lastAttendance": "2026-02-04",
       "periodStart": "2025-04-15",
-      "periodEnd": "2026-02-13",
+      "periodEnd": "2026-02-14",
       "monthlyBreakdown": [
         {
           "month": "2025-04",
